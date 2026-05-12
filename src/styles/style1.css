@@ -1,0 +1,30 @@
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+html, body {
+    overflow-x: hidden;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Shorthand for flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
+    width: 100%;
+    align-items: center;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+}
