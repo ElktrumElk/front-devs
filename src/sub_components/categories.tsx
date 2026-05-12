@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+interface cat {
+    setCategory: CallableFunction
+}
+
 const categoriesData = [
     'All',
     'Portfolio',
@@ -16,13 +20,15 @@ const categoriesData = [
     'Behind the Scenes'
 ];
 
-export default function Categories() {
+
+export default function Categories({setCategory}: cat) {
     // 1. Initialize state with the first category ('All')
     const [activeCat, setActiveCat] = useState('All');
 
     // 2. Accept the specific category name as a parameter
     const handleActiveCat = (catName: string) => {
         setActiveCat(catName);
+        setCategory(catName);
     };
 
     return (

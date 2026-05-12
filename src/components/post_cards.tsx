@@ -1,4 +1,3 @@
-
 import { postsData } from "../data/mockData"
 
 const likesharecnt: React.CSSProperties = {
@@ -8,13 +7,18 @@ const likesharecnt: React.CSSProperties = {
     alignItems: 'center'
 }
 
-export default function PostCards() {
+interface pc {
+    postByCategory: string
+}
+export default function PostCards({postByCategory}: pc) {
 
-    const data = postsData;
+  
+    const postData = postByCategory === 'All' ? postsData : postsData.filter(post => post.category === postByCategory)
+
     return (
         <>
             {
-                data.map((dat, idx) => (
+                postData.map((dat, idx) => (
                     <div key={idx} style={{ width: '100%', borderRadius: '10px', background: 'white', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
                         <div style={{ width: '100%', padding: '.4rem', display: 'flex', justifyContent: 'space-between' }}>
