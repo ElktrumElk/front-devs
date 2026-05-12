@@ -23,11 +23,11 @@ export default function MobileFooter() {
     return (
         <>
             <footer style={footerStyle}>
-                <div style={footerContainer}>
+                <nav style={footerContainer}>
                     <HomeButton />
                     <PostButton />
                     <SearchButton />
-                </div>
+                </nav>
             </footer>
         </>
     )
