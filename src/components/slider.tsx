@@ -12,20 +12,20 @@ const slides: SlideData[] = [
   {
     id: 1,
     image: 'https://cdn.dribbble.com/userupload/25262631/file/original-dfe419a034fee3bb345f6c08def7e764.jpg?resize=1024x768&vertical=center',
-    username: '@nature_explorer',
-    post: 'Captured this stunning view of the valley during my morning hike. Nature never ceases to amaze me!'
+    username: '@Vector_runner',
+    post: 'Frontend development is the art of building the bridge between cold, logical code and the warm, human experience.'
   },
   {
     id: 2,
     image: 'https://cdn.dribbble.com/userupload/47291370/file/a5cd041c54c59188b352becbc0876956.webp?format=webp&resize=640x480&vertical=center',
-    username: '@forest_soul',
-    post: 'Walking through the deep woods today. The sunlight filtering through the trees felt like magic.'
+    username: '@favmaclegend',
+    post: "A great user interface is like glass: if you're doing your job right, the user doesn't even notice the code; they just see the content."
   },
   {
     id: 3,
     image: 'https://cdn.dribbble.com/userupload/28589049/file/original-4d1d34ee4b63573d8af620818125698e.png?format=webp&resize=1000x750&vertical=center',
-    username: '@misty_mountains',
-    post: 'The morning mist over the hills is something everyone should experience at least once.'
+    username: '@Sheik',
+    post: "In the frontend world, we don't just write code; we curate pixels. Every margin, hover state, and transition is a conversation we're having with the user"
   }
 ];
 
