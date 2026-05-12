@@ -25,8 +25,8 @@ export default function PostCards() {
                             </div>
                         </div>
 
-                        <div >
-                            <img />
+                        <div style={{width: '100%', height: '200px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover'}}>
+                            <img src={dat.img} style={{width: 'inherit'}}/>
                         </div>
                     </div>
                 ))

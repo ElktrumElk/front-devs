@@ -4,7 +4,7 @@ export const postsData = [
         id: 1, 
         username: 'ElktrumElk', 
         category: 'Portfolio', 
-        img: 'https://unsplash.com',
+        img: 'https://cdn.dribbble.com/userupload/25262631/file/original-dfe419a034fee3bb345f6c08def7e764.jpg?resize=1024x768&vertical=center',
         postId: '01',
         description: 'Just finished the redesign for a FinTech dashboard. Focused on high-contrast data viz!' 
     },
@@ -12,7 +12,7 @@ export const postsData = [
         id: 2, 
         username: 'Sheik', 
         category: 'Code Snippets', 
-        img: 'https://unsplash.com',
+        img: 'https://cdn.dribbble.com/userupload/47335980/file/1914640f00a37c812f4098147b5beabf.jpg?format=webp&resize=1000x750&vertical=center',
         postId: '02',
         description: 'A clean way to handle multi-step forms in React using a custom useReducer hook. 🚀' 
     },
@@ -20,7 +20,7 @@ export const postsData = [
         id: 3, 
         username: 'Aziz', 
         category: 'UI/UX Design', 
-        img: 'https://unsplash.com',
+        img: 'https://cdn.dribbble.com/userupload/45818243/file/8e9b1f3001000849bd0c8dabff5dbe69.png?format=webp&resize=1000x750&vertical=center',
         postId: '03',
         description: 'Exploring Neumorphism vs. Glassmorphism for a music player app. Which one do you prefer?' 
     },
@@ -28,7 +28,7 @@ export const postsData = [
         id: 4, 
         username: 'Favmaclegend', 
         category: 'Micro-Tutorials', 
-        img: 'https://unsplash.com',
+        img: 'https://cdn.dribbble.com/userupload/47676718/file/23c6b132af44e11dd38c3b63433d5b45.png?format=webp&resize=800x600&vertical=center',
         postId: '04',
         description: 'Quick tip: Use the "inset" CSS property to replace top/right/bottom/left in one line!' 
     },
