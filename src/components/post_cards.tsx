@@ -10,9 +10,9 @@ const likesharecnt: React.CSSProperties = {
 interface pc {
     postByCategory: string
 }
-export default function PostCards({postByCategory}: pc) {
+export default function PostCards({ postByCategory }: pc) {
 
-  
+
     const postData = postByCategory === 'All' ? postsData : postsData.filter(post => post.category === postByCategory)
 
     return (
@@ -50,7 +50,7 @@ export default function PostCards({postByCategory}: pc) {
                             <p style={{ color: '#5c5c5c' }}>{dat.description}</p>
                         </article>
 
-                        <div style={{width: '100%', display: 'flex', gap: '1rem', alignItems: 'center'}}>
+                        <div style={{ width: '100%', display: 'flex', gap: '1rem', alignItems: 'center' }}>
                             <div style={likesharecnt}>
                                 <img src="https://img.icons8.com/?size=100&id=104&format=png&color=000000" width="20px" height="20px" alt="ratings" />
                                 <span>{dat.ratings}</span>
@@ -59,13 +59,19 @@ export default function PostCards({postByCategory}: pc) {
                                 <img src="https://img.icons8.com/?size=100&id=143&format=png&color=000000" width="20px" height="20px" alt="comment" />
                                 <span>{dat.comment}</span>
                             </div>
-                             <div style={likesharecnt}>
-                                <img src="https://img.icons8.com/?size=100&id=TDCU7KRViM2Q&format=png&color=000000" width="20px" height="20px" alt="share"/>
+                            <div style={likesharecnt}>
+                                <img src="https://img.icons8.com/?size=100&id=TDCU7KRViM2Q&format=png&color=000000" width="20px" height="20px" alt="share" />
                                 <span>{dat.share}</span>
                             </div>
                         </div>
                     </div>
                 ))
+            }
+            {
+                postData.length === 0 &&
+                <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'GrayText' }}>
+                    <span style={{fontSize: '14px'}}>No post Available for this category yet. You can add Post</span>
+                </div>
             }
         </>
     )
