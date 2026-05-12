@@ -7,7 +7,7 @@ interface Post {
     category: string;
     img: string;
     description: string;
-    rating?: number; // Added optional rating
+    ratings: number; // Added optional rating
 }
 
 export default function Search() {
@@ -30,6 +30,28 @@ export default function Search() {
         setRecentSearch(results);
     }
 
+    const handleRatings = (rate: number) => {
+        if (rate >= 1000) {
+            let calcRate = rate / 1000;
+            let r: string = calcRate.toString() + 'K'
+            return r;
+        }
+        else if (rate >= 1000000) {
+            let calcRate = rate / 1000000;
+            let r: string = calcRate.toString() + 'M';
+            return r
+        }
+        else if (rate >= 1000000000) {
+            let calcRate = rate / 1000000000;
+            let r: string = calcRate.toString() + 'B';
+            return r
+        }
+        else {
+            return rate.toString()
+        }
+
+
+    }
     return (
         <div style={styles.container}>
             <div style={styles.header}>
@@ -58,7 +80,7 @@ export default function Search() {
                             <span style={styles.username}>{post.username}</span>
                             <div style={styles.ratingRow}>
                                 <span style={styles.star}>★</span>
-                                <span>{post.rating || '4.8'}</span>
+                                <span>{handleRatings(post.ratings) || '4.8'}</span>
                             </div>
                         </div>
                     </div>
@@ -75,7 +97,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     searchBar: { width: '100%', display: 'flex', gap: '1rem', background: '#ffffff', borderRadius: '4rem', padding: '0.8rem 1.2rem', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' },
     input: { flex: '1', border: 'none', outline: 'none', fontSize: '1rem' },
     resultsHeader: { fontWeight: 'bold', fontSize: '0.9rem', color: '#666', marginTop: '1rem' },
-    
+
     // Grid Logic
     grid: {
         display: 'grid',
