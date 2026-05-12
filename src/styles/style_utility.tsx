@@ -2,16 +2,21 @@
 
 export default function StyleUtilities() {
     const footerButton: React.CSSProperties = {
-        width: '50px',
-        height: '50px',
+        width: '30px',
+        height: '30px',
         borderRadius: '50px',
-        background: '#010a1b',
+        background: 'none',
         border: 'none',
+        color: 'gray',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
+        alignItems: 'center'    
     }
 
-    return { footerButton }
+    const footerButtonIc: React.CSSProperties = {
+        width: '20px',
+        height: '20px'
+    }
+
+    return { footerButton, footerButtonIc }
 }

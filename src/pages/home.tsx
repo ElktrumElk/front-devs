@@ -1,10 +1,20 @@
-import Header from "../components/header";
+import ImageSlider from "../components/slider";
 
+const divs: React.CSSProperties = {
+    width: '100%',
+    height: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '1rem',
+    gap: '1rem'
+}
 export default function Home () {
 
     return (
         <>
-           <h1>Home</h1>
+          <div style={divs}>
+            <ImageSlider />
+          </div>
         </>
     )
 }
