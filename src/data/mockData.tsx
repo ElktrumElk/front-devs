@@ -9,7 +9,7 @@ export const postsData = [
         postId: '01',
         description: 'Just finished the redesign for a FinTech dashboard. Focused on high-contrast data viz!',
         title: 'FinTech Dahsboard',
-        ratings: 10000,
+        ratings: 12500,
         views: 50000,
         comment: 250,
         preview: 20000,
