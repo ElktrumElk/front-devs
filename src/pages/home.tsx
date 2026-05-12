@@ -1,3 +1,4 @@
+import PostCards from "../components/post_cards";
 import ImageSlider from "../components/slider";
 import Categories from "../sub_components/categories";
 
@@ -22,16 +23,21 @@ export default function Home() {
         <>
             <div style={homecnt}>
 
-                <section style={{width: '100%'}} id="imageSlider">
+                <section style={{ width: '100%' }} id="imageSlider">
                     <div style={imageSliderSection}>
-                        <h2 style={{fontSize: '.9rem', lineHeight: '.9rem'}}>Top Raters</h2>
+                        <h2 style={{ fontSize: '.9rem', lineHeight: '.9rem' }}>Top Raters</h2>
                         <ImageSlider />
                     </div>
                 </section>
 
-                <nav style={{width: '100%'}}>
+                <nav style={{ width: '100%' }}>
                     <Categories />
                 </nav>
+                <section id="post-feeds" style={{ width: '100%' }}>
+                    <div style={{display: 'flex', width: '100%', flexDirection: 'column', gap: '1rem'}}>
+                        <PostCards />
+                    </div>
+                </section>
             </div>
         </>
     )

@@ -33,7 +33,7 @@ export default function Categories() {
                     style={{
                         // 3. Compare current category in loop to the active state
                         background: activeCat === cat ? '#010a1b' : 'none',
-                        color: activeCat === cat ? 'white' : 'black',
+                        color: activeCat === cat ? 'white' : '#010a1b',
                         border: '1px solid black',
                         borderRadius: '4rem',
                         display: 'flex',
