@@ -28,6 +28,16 @@ export default function PostCards() {
                         <div style={{width: '100%', height: '200px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover'}}>
                             <img src={dat.img} style={{width: 'inherit'}}/>
                         </div>
+
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <strong>{dat.category.toUpperCase()}</strong>
+                            <span style={{color: 'gray'}}>{dat.time_posted}</span>
+                        </div>
+
+                        <article style={{width: '100%', display: 'flex', flexDirection: 'column', gap: '.5rem'}}>
+                            <h3>{dat.title}</h3>
+                            <p style={{color: '#5c5c5c'}}>{dat.description}</p>
+                        </article>
                     </div>
                 ))
             }
