@@ -2,7 +2,7 @@ import { postsData } from "../data/mockData"
 
 const likesharecnt: React.CSSProperties = {
     display: 'flex',
-    gap: '.5rem',
+    gap: '.2rem',
     color: 'gray',
     alignItems: 'center'
 }
