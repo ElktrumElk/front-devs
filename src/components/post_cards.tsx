@@ -1,6 +1,13 @@
 
 import { postsData } from "../data/mockData"
 
+const likesharecnt: React.CSSProperties = {
+    display: 'flex',
+    gap: '.5rem',
+    color: 'gray',
+    alignItems: 'center'
+}
+
 export default function PostCards() {
 
     const data = postsData;
@@ -39,17 +46,17 @@ export default function PostCards() {
                             <p style={{ color: '#5c5c5c' }}>{dat.description}</p>
                         </article>
 
-                        <div style={{width: '100%', display: 'flex', gap: '.3rem', alignItems: 'center'}}>
-                            <div>
-                                <img alt="ratings" />
+                        <div style={{width: '100%', display: 'flex', gap: '1rem', alignItems: 'center'}}>
+                            <div style={likesharecnt}>
+                                <img src="https://img.icons8.com/?size=100&id=104&format=png&color=000000" width="20px" height="20px" alt="ratings" />
                                 <span>{dat.ratings}</span>
                             </div>
-                            <div>
-                                <img alt="comment" />
+                            <div style={likesharecnt}>
+                                <img src="https://img.icons8.com/?size=100&id=143&format=png&color=000000" width="20px" height="20px" alt="comment" />
                                 <span>{dat.comment}</span>
                             </div>
-                             <div>
-                                <img alt="share"/>
+                             <div style={likesharecnt}>
+                                <img src="https://img.icons8.com/?size=100&id=TDCU7KRViM2Q&format=png&color=000000" width="20px" height="20px" alt="share"/>
                                 <span>{dat.share}</span>
                             </div>
                         </div>
@@ -59,3 +66,4 @@ export default function PostCards() {
         </>
     )
 }
+
