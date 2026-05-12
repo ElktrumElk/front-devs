@@ -1,6 +1,6 @@
 import ImageSlider from "../components/slider";
 
-const divs: React.CSSProperties = {
+const homecnt: React.CSSProperties = {
     width: '100%',
     height: 'auto',
     display: 'flex',
@@ -8,13 +8,25 @@ const divs: React.CSSProperties = {
     padding: '1rem',
     gap: '1rem'
 }
-export default function Home () {
+
+const imageSliderSection: React.CSSProperties = {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem'
+}
+export default function Home() {
 
     return (
         <>
-          <div style={divs}>
-            <ImageSlider />
-          </div>
+            <div style={homecnt}>
+                <section style={{width: '100%'}} id="imageSlider">
+                    <div style={imageSliderSection}>
+                        <h2 style={{fontSize: '.9rem', lineHeight: '.9rem'}}>Top Raters</h2>
+                        <ImageSlider />
+                    </div>
+                </section>
+            </div>
         </>
     )
 }
