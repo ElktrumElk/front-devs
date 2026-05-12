@@ -1,4 +1,5 @@
 import ImageSlider from "../components/slider";
+import Categories from "../sub_components/categories";
 
 const homecnt: React.CSSProperties = {
     width: '100%',
@@ -20,12 +21,17 @@ export default function Home() {
     return (
         <>
             <div style={homecnt}>
+
                 <section style={{width: '100%'}} id="imageSlider">
                     <div style={imageSliderSection}>
                         <h2 style={{fontSize: '.9rem', lineHeight: '.9rem'}}>Top Raters</h2>
                         <ImageSlider />
                     </div>
                 </section>
+
+                <nav style={{width: '100%'}}>
+                    <Categories />
+                </nav>
             </div>
         </>
     )
