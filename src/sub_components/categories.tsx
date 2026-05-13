@@ -4,7 +4,7 @@ interface cat {
     setCategory: CallableFunction
 }
 
-const categoriesData = [
+export const categoriesData = [
     'All',
     'Portfolio',
     'Career & Insights',
