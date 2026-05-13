@@ -27,9 +27,10 @@ export default function PostCards({ postByCategory }: pc) {
                                 <div style={{ background: '#03344b', width: '40px', height: '40px', color: 'white', padding: '20px', borderRadius: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                     <span>{dat.username.substring(0, 1)}</span>
                                 </div>
-
-                                <h4>{dat.username}</h4>
-                                <span>{dat.username.substring(0, 4)}</span>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem'}}>
+                                    <h4>{dat.username}</h4>
+                                    <span style={{ color: 'GrayText', fontSize: '.8rem', lineHeight: '.8rem'}}>{dat.usertag}</span>
+                                </div>
                             </div>
                             <div>
                                 <span>Follow</span>
@@ -70,7 +71,7 @@ export default function PostCards({ postByCategory }: pc) {
             {
                 postData.length === 0 &&
                 <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'GrayText' }}>
-                    <span style={{fontSize: '14px'}}>No post Available for this category yet. You can add Post</span>
+                    <span style={{ fontSize: '14px' }}>No post Available for this category yet. You can add Post</span>
                 </div>
             }
         </>

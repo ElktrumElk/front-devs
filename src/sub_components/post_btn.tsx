@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 
 
 const addButton: React.CSSProperties = {
@@ -17,12 +18,21 @@ const addIc: React.CSSProperties = {
     height: '30px'
 }
 
-export default function PostButton() {
+interface postbutton {
+    color: string,
+    active: CallableFunction
+}
+export default function PostButton({ color = 'ffffff', active }: postbutton) {
+    const navigate = useNavigate();
 
+    const handleRoute = () => {
+        navigate('/post');
+        active('post');
+    }
     return (
         <>
-            <button style={addButton}>
-                <img style={addIc} src="https://img.icons8.com/?size=100&id=oF7jXJoq6nNX&format=png&color=ffffff" />
+            <button style={addButton} onClick={handleRoute}>
+                <img style={addIc} src={`https://img.icons8.com/?size=100&id=oF7jXJoq6nNX&format=png&color=${color}`} />
             </button>
         </>
     )

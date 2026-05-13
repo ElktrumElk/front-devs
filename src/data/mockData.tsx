@@ -3,6 +3,7 @@ export const postsData = [
     {
         id: 1,
         username: 'ElktrumElk',
+        usertag: '@vector_runner',
         category: 'Portfolio',
         img: 'https://cdn.dribbble.com/userupload/25262631/file/original-dfe419a034fee3bb345f6c08def7e764.jpg?resize=1024x768&vertical=center',
         time_posted: '2 days ago',
@@ -19,6 +20,7 @@ export const postsData = [
     {
         id: 2,
         username: 'Sheik',
+        usertag: '@sheik',
         category: 'Code Snippets',
         time_posted: '1 days ago',
         img: 'https://cdn.dribbble.com/userupload/47335980/file/1914640f00a37c812f4098147b5beabf.jpg?format=webp&resize=1000x750&vertical=center',
@@ -35,6 +37,7 @@ export const postsData = [
     {
         id: 3,
         username: 'Aziz',
+        usertag: '@aziz_bah',
         category: 'UI/UX Design',
         img: 'https://cdn.dribbble.com/userupload/45818243/file/8e9b1f3001000849bd0c8dabff5dbe69.png?format=webp&resize=1000x750&vertical=center',
         postId: '03',
@@ -51,6 +54,7 @@ export const postsData = [
     {
         id: 4,
         username: 'Favmaclegend',
+        usertag: '@favmaclegend',
         category: 'Micro-Tutorials',
         img: 'https://cdn.dribbble.com/userupload/47676718/file/23c6b132af44e11dd38c3b63433d5b45.png?format=webp&resize=800x600&vertical=center',
         postId: '04',
@@ -66,6 +70,7 @@ export const postsData = [
     {
         id: 5,
         username: 'AG',
+        usertag: '@non_of_your_business',
         category: 'Tech Stack',
         img: 'https://cdn.dribbble.com/userupload/47322205/file/c461fc6c7de7575be81c7b7a4021d93e.png?format=webp&resize=1000x750&vertical=center',
         time_posted: '1hr ago',
@@ -81,6 +86,7 @@ export const postsData = [
     {
         id: 6,
         username: 'Dev_Sarah',
+        usertag: '@sarah',
         category: 'Performance',
         img: 'https://cdn.dribbble.com/userupload/29936053/file/original-bdba2a6fea30578bce9260043edf4acb.jpg?format=webp&resize=800x600&vertical=center',
         time_posted: '12 hr ago',
@@ -96,6 +102,7 @@ export const postsData = [
     {
         id: 7,
         username: 'CodeNinja',
+        usertag: '@codeninja',
         category: 'Educational & Tips',
         img: 'https://cdn.dribbble.com/userupload/29919440/file/original-9c067a862bcf687cedcbb922c8bfd485.jpg?format=webp&resize=1000x750&vertical=center',
         postId: '07',
@@ -111,6 +118,7 @@ export const postsData = [
     {
         id: 8,
         username: 'Sheik',
+        usertag: '@sheik',
         category: 'Behind the Scenes',
         img: 'https://cdn.dribbble.com/userupload/25299216/file/still-66d3c038274c9a98b6592d5b6be282b4.png?format=webp&resize=1000x750&vertical=center',
         time_posted: '2 days ago',
@@ -126,6 +134,7 @@ export const postsData = [
     {
         id: 9,
         username: 'Aziz',
+        usertag: '@aziz_bah',
         category: 'Portfolio',
         img: 'https://cdn.dribbble.com/userupload/46290074/file/2d96849c8e924c98f22b55cadfb48805.png?crop=0x0-4800x3600&format=webp&resize=1000x750&vertical=center',
         time_posted: '3 hr ago',
@@ -141,6 +150,7 @@ export const postsData = [
     {
         id: 10,
         username: 'ElktrumElk',
+        usertag: '@vector_runner',
         category: 'Resources',
         img: 'https://cdn.dribbble.com/userupload/47366534/file/0989b30fbcac28362794bf84901be521.png?format=webp&resize=1000x750&vertical=center',
         time_posted: '2 days ago',
