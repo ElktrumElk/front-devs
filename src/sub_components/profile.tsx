@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+
 const userContainer: React.CSSProperties = {
     width: '35px',
     height: '35px',
@@ -16,9 +18,11 @@ const userStyle: React.CSSProperties = {
 
 export default function Profile() {
 
+    const navigate = useNavigate();
+
     return (
         <>
-            <div style={userContainer}>
+            <div style={userContainer} onClick={() => navigate('/user/profile')}>
                 <img style={userStyle} src="https://img.icons8.com/?size=100&id=22396&format=png&color=000000" alt="user" />
             </div>
         </>

@@ -1,114 +1,208 @@
 import type React from "react";
+import { useNavigate } from "react-router-dom";
+import { postsData } from "../data/mockData";
+import { SubPostCard } from "../sub_components/sub_post_cards";
 
 // --- INLINE STYLES ---
-const profileWrapper: React.CSSProperties = {
-    maxWidth: "500px",
-    padding: "2rem",
-    background: "#ffffff",
-    borderRadius: "16px",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+const pageWrapper: React.CSSProperties = {
+    width: '90%',
+    height: '100%',
+    margin: "0 auto",
+    padding: "2.5rem 1rem",
+    background: "#fdfdfd",
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    color: "#1a1a1a",
-    textAlign: "center",
+    color: "#000000",
     gridRow: 'span 2',
-    gridColumn: 'span 1',
-    width: '100%'
+    borderRadius: '1rem'
 };
 
-const avatarStyle: React.CSSProperties = {
-    width: "110px",
-    height: "110px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    border: "3px solid #010a1b",
+const headerSection: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     marginBottom: "1rem"
 };
 
+const avatarWrapper: React.CSSProperties = {
+    position: "relative",
+    width: "90px",
+    height: "90px",
+    marginBottom: "1rem"
+};
+
+const avatarImg: React.CSSProperties = {
+    width: "100%",
+    height: "100%",
+    borderRadius: "50%",
+    objectFit: "cover"
+};
+
+const verifiedBadge: React.CSSProperties = {
+    position: "absolute",
+    bottom: "2px",
+    right: "2px",
+    background: "#ff5a36",
+    color: "#ffffff",
+    borderRadius: "50%",
+    width: "20px",
+    height: "20px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "0.7rem",
+    border: "2px solid #fdfdfd"
+};
+
 const nameStyle: React.CSSProperties = {
-    fontSize: "1.5rem",
-    fontWeight: "700",
+    fontSize: "1.35rem",
+    fontWeight: "600",
     margin: "0 0 0.25rem 0",
-    color: "#010a1b"
+    letterSpacing: "-0.02em"
 };
 
 const emailStyle: React.CSSProperties = {
-    fontSize: "0.95rem",
-    color: "#64748b",
-    margin: "0 0 1.5rem 0"
+    fontSize: "0.9rem",
+    color: "#8e8e93",
+    margin: 0
 };
 
-const infoCardStyle: React.CSSProperties = {
-    background: "#f8fafc",
-    borderRadius: "12px",
-    padding: "1.25rem",
-    textAlign: "left",
+const menuListContainer: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
-    gap: "1rem"
+    width: "100%"
 };
 
-const dataRowStyle: React.CSSProperties = {
+const menuItemRow: React.CSSProperties = {
     display: "flex",
-    flexDirection: "column",
-    gap: "0.25rem",
-    borderBottom: "1px solid #e2e8f0",
-    paddingBottom: "0.75rem"
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "1.25rem 0.5rem",
+    borderBottom: "1px solid #f2f2f7",
+    cursor: "pointer",
+    background: "none",
+    borderTop: "none",
+    borderLeft: "none",
+    borderRight: "none",
+    width: "100%",
+    textAlign: "left"
+};
+
+const leftItemBlock: React.CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    gap: "1.25rem"
 };
 
 const labelStyle: React.CSSProperties = {
-    fontSize: "0.8rem",
-    textTransform: "uppercase",
-    letterSpacing: "0.05em",
-    color: "#94a3b8",
-    fontWeight: "600"
-};
-
-const valueStyle: React.CSSProperties = {
     fontSize: "1rem",
-    color: "#334155",
-    fontWeight: "500"
+    fontWeight: "500",
+    color: "#000000"
 };
 
-export default function StaticUserProfile() {
-    // Static mock data object (Replace values with live variables from your app)
-    const userData = {
-        name: "ElktrumElk",
-        email: "elk@fedora.local",
-        accountType: "Front-End Developer",
-        joinedDate: "October 2023",
-        bio: "Building responsive web platforms with clean UI on Fedora workstation environments."
+const arrowStyle: React.CSSProperties = {
+    fontSize: "0.85rem",
+    color: "#c7c7cc",
+    fontWeight: "bold"
+};
+
+export default function UserProfileMenu() {
+    const navigate = useNavigate();
+
+    const user = {
+        name: "Elktrum Elk",
+        email: "elk@gmail.com",
+        bio: 'I am the Vector Runner',
+        avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFsZSUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
     };
 
+    // Added explicit destination paths for routing
+    const menuItems = [
+        {
+            label: "Personal Information",
+            path: "/profile/info"
+        },
+        {
+            label: "Posts",
+            path: "/profile/posts"
+        },
+        {
+            label: "Settings",
+
+            path: "/settings"
+        }
+    ];
+
+    const handleLogout = () => {
+        // Clear tokens or state here if needed
+        console.log("Logging user out...");
+        navigate("/login", { replace: true });
+    };
+
+    const posts = postsData;
+    const userPost = posts.filter(x => x.usertag === '@vector_runner');
+    
     return (
-        <div style={profileWrapper}>
-            {/* Top Presentation Block */}
-            <img 
-                src="unsplash.com" 
-                alt="User Profile" 
-                style={avatarStyle} 
-            />
-            <h2 style={nameStyle}>{userData.name}</h2>
-            <p style={emailStyle}>{userData.email}</p>
-
-            {/* Detailed Data List */}
-            <div style={infoCardStyle}>
-                <div style={dataRowStyle}>
-                    <span style={labelStyle}>Role</span>
-                    <span style={valueStyle}>{userData.accountType}</span>
+        <div style={pageWrapper}>
+            {/* Identity Profile Block */}
+            <div style={headerSection}>
+                <div style={avatarWrapper}>
+                    <img src={user.avatarUrl} alt={user.name} style={avatarImg} />
+                    <div style={verifiedBadge}>✓</div>
                 </div>
+                <h2 style={nameStyle}>{user.name}</h2>
+                <p style={emailStyle}>{user.email}</p>
 
-                <div style={dataRowStyle}>
-                    <span style={labelStyle}>Member Since</span>
-                    <span style={valueStyle}>{userData.joinedDate}</span>
-                </div>
-
-                <div style={{ ...dataRowStyle, borderBottom: "none", paddingBottom: 0 }}>
-                    <span style={labelStyle}>Bio</span>
-                    <span style={{ ...valueStyle, lineHeight: "1.5", fontSize: "0.95rem" }}>
-                        {userData.bio}
-                    </span>
+                <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem'}}>
+                    <button style={{padding: '.8rem 2rem', borderRadius: '1rem', color: 'white', fontSize: '1rem', background: '#010a1b'}}>Get In touch</button>
                 </div>
             </div>
+
+
+            <div style={{ display: 'flex', width: '100%', justifyContent: 'center', color: 'GrayText' }}>
+                <p>{user.bio}</p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', justifyItems: 'center', marginBlockStart: '2rem', marginBlockEnd: '2rem' }}>
+
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <strong>200</strong>
+                    <span style={{color: 'GrayText'}}>Followers</span>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <strong>90000</strong>
+                    <span style={{color: 'GrayText'}}>Ratings</span>
+                </div>
+            </div>
+            
+         
+
+            {/* Menu List Navigation Container */}
+            <nav style={menuListContainer}>
+                {menuItems.map((item, index) => (
+                    <button
+                        key={index}
+                        style={menuItemRow}
+                        onClick={() => navigate(item.path)}
+                    >
+                        <div style={leftItemBlock}>
+                            <span style={labelStyle}>{item.label}</span>
+                        </div>
+                        <span style={arrowStyle}>❯</span>
+                    </button>
+                ))}
+
+                {/* Integrated Logout Row */}
+                <button
+                    style={{ ...menuItemRow, borderBottom: "none" }}
+                    onClick={handleLogout}
+                >
+                    <div style={leftItemBlock}>
+                        <span style={{ ...labelStyle, color: "#ef4444" }}>Logout</span>
+                    </div>
+                    <span style={arrowStyle}>❯</span>
+                </button>
+            </nav>
         </div>
     );
 }

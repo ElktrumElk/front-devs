@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import { postsData } from "../data/mockData";
+import { SubPostCard } from "../sub_components/sub_post_cards";
 
 interface Post {
     id: number;
@@ -30,28 +31,7 @@ export default function Search() {
         setRecentSearch(results);
     }
 
-    const handleRatings = (rate: number) => {
-        if (rate >= 1000) {
-            let calcRate = rate / 1000;
-            let r: string = calcRate.toString() + 'K'
-            return r;
-        }
-        else if (rate >= 1000000) {
-            let calcRate = rate / 1000000;
-            let r: string = calcRate.toString() + 'M';
-            return r
-        }
-        else if (rate >= 1000000000) {
-            let calcRate = rate / 1000000000;
-            let r: string = calcRate.toString() + 'B';
-            return r
-        }
-        else {
-            return rate.toString()
-        }
-
-
-    }
+  
     return (
         <div style={styles.container}>
             <div style={styles.header}>
@@ -71,21 +51,7 @@ export default function Search() {
                 {recentSearch.length > 0 ? "Results" : "Recent Searches"}
             </div>
 
-            {/* The 2-Column Grid */}
-            <div style={styles.grid}>
-                {recentSearch.map((post) => (
-                    <div key={post.id} style={styles.card}>
-                        <div style={{ ...styles.imageThumb, backgroundImage: `url(${post.img})` }} />
-                        <div style={styles.cardInfo}>
-                            <span style={styles.username}>{post.username}</span>
-                            <div style={styles.ratingRow}>
-                                <span style={styles.star}>★</span>
-                                <span>{handleRatings(post.ratings) || '4.8'}</span>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <SubPostCard styles={styles} list={recentSearch} />
         </div>
     )
 }

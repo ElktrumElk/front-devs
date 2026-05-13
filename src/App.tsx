@@ -12,7 +12,7 @@ import NotificationPanel from './pages/notifaction';
 
 const subWrapperDesktop: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: '.5fr 1.5fr 500px .7fr',
+  gridTemplateColumns: '.5fr 1.5fr 1fr 400px',
   width: "100%",
   height: "100%",
   gap: '1rem'
@@ -51,6 +51,7 @@ export default function App() {
               <Route path='/home' element={<Home />} />
               <Route path='/post' element={<AddPost />} />
               <Route path='/search' element={<Search />} />
+              <Route path='/user/profile' element={<UserProfile />} />
             </Routes>
           </div>
 
