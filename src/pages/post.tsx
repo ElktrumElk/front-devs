@@ -14,7 +14,8 @@ export default function AddPost() {
         setRemainingChars(MAX_LENGTH - inputLength);
     };
 
-    const categories = categoriesData;
+    const categories = categoriesData.filter(x => x !== 'All');
+    const [cat, setCat] = useState(categories);
 
     const imageSelector = useRef<HTMLInputElement>(null);
     const [isImageSelected, setImageSelected] = useState(false);
@@ -67,7 +68,9 @@ export default function AddPost() {
     const tagInputElement = useRef<HTMLInputElement>(null);
 
     const handleAddTag = () => {
-        handleTag(tagInputElement.current?.value.length !== 0 ? tagInputElement.current?.value : 'unknown');
+        const value = tagInputElement.current?.value.length !== 0 ? tagInputElement.current?.value : 'unknown'
+        handleTag(value);
+        setCat(prev => [value, ...prev]);
     }
 
     return (
@@ -123,7 +126,7 @@ export default function AddPost() {
                             <div style={{ display: 'flex', gap: '.5rem', overflowX: 'auto', background: '#f5f5f5', padding: '.6rem', borderRadius: '.5rem' }}>
                                 {
                                     tag.map((tg, idx) => (
-                                        <div key={idx} style={{ background: '#ffffff', padding: '.5rem', flex: '0 0 auto', borderRadius: '.5rem' }}>
+                                        <div onClick={() => handleTag(tg)} key={idx} style={{ background: '#ffffff', padding: '.5rem', flex: '0 0 auto', borderRadius: '.5rem' }}>
                                             <span>{tg}</span>
                                         </div>
                                     ))
@@ -142,7 +145,7 @@ export default function AddPost() {
                                 </button>
 
                                 {
-                                    categories.map((cat, idx) => (
+                                    cat.map((cat, idx) => (
                                         <li onClick={() => handleTag(cat)} key={idx} style={{ backgroundColor: tag.includes(cat) ? '#1499ec40' : 'white', flex: '0 0 auto', padding: '.2rem 1rem', borderRadius: '1rem' }}>{cat}</li>
                                     ))
                                 }
@@ -170,11 +173,6 @@ export default function AddPost() {
 
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem', width: '100%' }}>
-                    <label htmlFor="prev-link" >Preview Link</label>
-                    <input id="prev-link" placeholder="https://myapp.com" style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
-                </div>
-
                 <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '.2rem', width: '100%' }}>
                         <label htmlFor="cat" style={{ fontSize: '.9rem' }}>Add Category</label>
@@ -187,6 +185,12 @@ export default function AddPost() {
                         </select>
                     </div>
                 </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem', width: '100%' }}>
+                    <label htmlFor="prev-link" >Preview Link</label>
+                    <input id="prev-link" placeholder="https://myapp.com" style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
+                </div>
+
                 <button style={{ width: '100%', padding: '1rem', borderRadius: '1rem', marginBlockStart: '4rem', marginBlockEnd: '1rem', background: '#010a1b', border: 'none', color: 'white' }}>Post</button>
             </form>
         </div>
