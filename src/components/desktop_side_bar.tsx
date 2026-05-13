@@ -1,0 +1,47 @@
+import type React from "react";
+import { useState } from "react";
+import HomeButton from "../sub_components/home_btn";
+import PostButton from "../sub_components/post_btn";
+import SearchButton from "../sub_components/search_btn";
+
+const sidebarStyle: React.CSSProperties = {
+    width: '100%',   
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    background: '#ffffff',
+    padding: '2rem 1rem',
+    gridRow: 'span 2',
+    
+}
+
+const sidebarContainer: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column', // Vertical list positioning
+    gap: '1.5rem',           // Clean separation margins instead of spaces
+    alignItems: 'flex-start', // Left aligns items cleanly
+    width: '100%',
+    marginTop: '2rem'        // Creates room for top branding/logo area
+}
+
+const logoPlaceholder: React.CSSProperties = {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    paddingLeft: '0.5rem',
+    color: '#010a1b'
+}
+
+export default function DesktopSidebar() {
+    const [pageButtonActive, setPageButtonActive] = useState('feed');
+
+    return (
+        <aside style={sidebarStyle}>
+            <h1>FrontDevs</h1>
+            <nav style={sidebarContainer}>
+                <HomeButton color={pageButtonActive === 'feed' ? "0e0d0d" : "7a7a7a"} active={setPageButtonActive}/>
+                <SearchButton color={pageButtonActive === 'search' ? "0e0d0d" : "7a7a7a"} active={setPageButtonActive}/>
+                
+            </nav>
+        </aside>
+    );
+}

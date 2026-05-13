@@ -9,7 +9,9 @@ const homecnt: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
     padding: '1rem',
-    gap: '1rem'
+    gap: '1rem',
+    overflowY: 'auto'
+
 }
 
 const imageSliderSection: React.CSSProperties = {

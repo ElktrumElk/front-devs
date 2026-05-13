@@ -1,5 +1,6 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { categoriesData } from "../sub_components/categories";
+import { styleResponsive } from "../styles/responsivness";
 
 
 
@@ -73,6 +74,7 @@ export default function AddPost() {
         setCat(prev => [value, ...prev]);
     }
 
+
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem' }}>
             <form style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
@@ -98,7 +100,7 @@ export default function AddPost() {
                         isImageSelected &&
                         <>
 
-                            <div style={{ width: '100%', opacity: imageOpacity, transition: 'opacity .4s ease', height: '15rem', background: 'black', borderRadius: '1rem', objectFit: 'cover', overflow: 'hidden', position: 'relative' }}>
+                            <div style={{ width: '100%', opacity: imageOpacity, transition: 'opacity .4s ease',  background: 'black', borderRadius: '1rem', objectFit: 'cover', overflow: 'hidden', position: 'relative' }}>
 
                                 <div onClick={destoryImage} style={{ width: '30px', height: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '2rem', background: '#191818bc', backdropFilter: 'blur(10px)', position: 'absolute', right: '10px', top: '10px' }}>
                                     <img src="https://img.icons8.com/?size=100&id=1NVn5K29mOSz&format=png&color=ffffff" width={"20"} height={"20"} alt="cancel" />
@@ -185,7 +187,7 @@ export default function AddPost() {
                         </select>
                     </div>
                 </div>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem', width: '100%' }}>
                     <label htmlFor="prev-link" >Preview Link</label>
                     <input id="prev-link" placeholder="https://myapp.com" style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />

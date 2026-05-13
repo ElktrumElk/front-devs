@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
     padding: 0;
@@ -6,7 +5,8 @@
     font-family: sans-serif;
 }
 
-html, body {
+html,
+body {
     overflow-x: hidden;
     min-height: 100dvh;
     display: flex;
@@ -18,9 +18,13 @@ html, body {
 #root {
     display: flex;
     flex-direction: column;
-    flex: 1; /* Shorthand for flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
+    flex: 1;
+    /* Shorthand for flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
     width: 100%;
     align-items: center;
+    align-items: center;
+    
+
 }
 
 .app {
@@ -29,4 +33,22 @@ html, body {
     align-items: center;
     width: 100%;
     flex-grow: 1;
+    height: 100%;
+}
+
+
+@media (min-width: 1024px) {
+    .app {
+        position: fixed;
+    }
+    .wrapper {
+        overflow-y: auto;
+    }
+    .header {
+        grid-column: span 2;
+    }
+    .subWrapper{
+        overflow-y: scroll;
+        grid-row: span 2;
+    }
 }

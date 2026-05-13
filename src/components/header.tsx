@@ -14,11 +14,12 @@ const subHeaderContainers: React.CSSProperties = {
     gap: '1rem',
     alignItems: 'center'
 }
+
 export default function Header () {
 
     return (
         <>
-            <header style={headerStyle}>
+            <header className="header" style={headerStyle}>
                 <div>
                     <h1 style={{color: 'black', fontSize: '20px', lineHeight: '20px' }}>FrontDevs</h1>
                 </div>

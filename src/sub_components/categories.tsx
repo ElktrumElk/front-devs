@@ -32,7 +32,7 @@ export default function Categories({setCategory}: cat) {
     };
 
     return (
-        <div style={{ width: '100%', display: 'flex', gap: '1rem', overflowX: 'auto', padding: '10px', scrollbarColor: 'transparent', scrollbarWidth: "none" }}>
+        <div style={{ width: '100%', display: 'flex', gap: '1rem', overflowX: 'auto', padding: '10px', scrollbarColor: '#2323236b', }}>
             {categoriesData.map((cat: string, idx) => (
                 <button
                     key={idx}

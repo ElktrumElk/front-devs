@@ -1,4 +1,5 @@
 import { postsData } from "../data/mockData"
+import { styleResponsive } from "../styles/responsivness";
 
 const likesharecnt: React.CSSProperties = {
     display: 'flex',
@@ -11,6 +12,8 @@ interface pc {
     postByCategory: string
 }
 export default function PostCards({ postByCategory }: pc) {
+
+    const { isDesktop } = styleResponsive();
 
 
     const postData = postByCategory === 'All' ? postsData : postsData.filter(post => post.category === postByCategory)
@@ -27,9 +30,9 @@ export default function PostCards({ postByCategory }: pc) {
                                 <div style={{ background: '#03344b', width: '40px', height: '40px', color: 'white', padding: '20px', borderRadius: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                     <span>{dat.username.substring(0, 1)}</span>
                                 </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem'}}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem' }}>
                                     <h4>{dat.username}</h4>
-                                    <span style={{ color: 'GrayText', fontSize: '.8rem', lineHeight: '.8rem'}}>{dat.usertag}</span>
+                                    <span style={{ color: 'GrayText', fontSize: '.8rem', lineHeight: '.8rem' }}>{dat.usertag}</span>
                                 </div>
                             </div>
                             <div>
@@ -37,7 +40,7 @@ export default function PostCards({ postByCategory }: pc) {
                             </div>
                         </div>
 
-                        <div style={{ width: '100%', height: '250px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover' }}>
+                        <div style={{ width: '100%', height: isDesktop ? '350px' : '250px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover' }}>
                             <img src={dat.img} style={{ width: 'inherit' }} />
                         </div>
 
