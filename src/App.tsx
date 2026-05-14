@@ -20,6 +20,15 @@ const subWrapperDesktop: React.CSSProperties = {
 }
 
 
+const subWrapperDesktopMini: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '.5fr 1.5fr 400px',
+  width: "100%",
+  height: "100%",
+  gap: '1rem'
+
+}
+
 const subWrapperMobile: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
@@ -31,48 +40,63 @@ const subWrapperMobile: React.CSSProperties = {
 
 }
 
+const subWrapperTablet: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  width: '100%',
+  flexGrow: "1",
+  minWidth: '0',
+  height: '100%',
+  maxWidth: '600px'
+}
+
 export default function App() {
 
-  const { isMobile, isTablet } = styleResponsive();
-  const isDesktop = !isMobile && !isTablet;
+  const { isMobile, isTablet, isMiniDesktop } = styleResponsive();
+  const isDesktop = !isMobile && !isTablet && !isMiniDesktop;
 
   return (
     <>
       <div className='app' >
-        <div style={isDesktop ? subWrapperDesktop : subWrapperMobile}>
+        <div style={isDesktop ? subWrapperDesktop : isMiniDesktop ? subWrapperDesktopMini : subWrapperMobile}>
 
           {isDesktop && <DesktopSidebar />}
-          {isMobile && <Header />}
+          {isMiniDesktop && <DesktopSidebar />}
+          {!isDesktop && !isMiniDesktop && <Header />}
+        
 
-
-          <div style={subWrapperMobile} className='subWrapper'>
-
+          <div style={isTablet ? subWrapperTablet : subWrapperMobile} className='subWrapper'>
             <Routes>
               <Route path='/home' element={<Home />} />
               <Route path='/post' element={<AddPost />} />
               <Route path='/search' element={<Search />} />
               <Route path='/user/profile' element={<UserProfile />} />
+              <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home /> }/>
             </Routes>
           </div>
 
-          <div style={{ gridRow: 'span 2', width: "100%", overflowY: 'auto', display: "flex", flexDirection: "column", alignItems: "center", padding: "1rem", gap: '1rem'}}>
+          <div style={{ gridRow: 'span 2',  width: "100%", overflowY: 'auto', display:  !isDesktop && isMiniDesktop ? 'none' : 'flex', flexDirection: "column", alignItems: "center", padding: "1rem", gap: '1rem' }}>
             {
-              isDesktop &&
+              isDesktop && !isMiniDesktop &&
               <>
                 <NotificationPanel />
-                <div style={{ width: '100%', background: '#ffffff', padding: '.5rem'}}>
+                <div style={{ width: '100%', background: '#ffffff', padding: '.5rem' }}>
                   <AddPost />
                 </div>
               </>
             }
           </div>
+
           {isDesktop && <UserProfile />}
+          {isMiniDesktop && <UserProfile />}
 
         </div>
         {
-          isMobile &&
+          !isDesktop && !isMiniDesktop &&
           <MobileFooter />
         }
+     
 
       </div>
     </>

@@ -143,7 +143,7 @@ export default function NotificationPanel() {
     };
 
     return (
-        <div style={panelWrapper}>
+        <div style={panelWrapper} className="notify-panel-miniDesktop">
             {/* Panel Top Heading Controls */}
             <div style={panelHeader}>
                 <h3 style={titleStyle}>

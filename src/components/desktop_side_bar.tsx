@@ -2,16 +2,18 @@ import type React from "react";
 import { useState } from "react";
 import HomeButton from "../sub_components/home_btn";
 import SearchButton from "../sub_components/search_btn";
+import { styleResponsive } from "../styles/responsivness";
+import PostButton from "../sub_components/post_btn";
 
 const sidebarStyle: React.CSSProperties = {
-    width: '100%',   
+    width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
     background: '#ffffff',
     padding: '2rem 1rem',
-    gridRow: 'span 2',
-    
+    gridRow: 'span 2'
+
 }
 
 const sidebarContainer: React.CSSProperties = {
@@ -20,6 +22,7 @@ const sidebarContainer: React.CSSProperties = {
     gap: '1.5rem',           // Clean separation margins instead of spaces
     alignItems: 'flex-start', // Left aligns items cleanly
     width: '100%',
+    height: '100%',
     marginTop: '2rem'        // Creates room for top branding/logo area
 }
 
@@ -32,14 +35,22 @@ const sidebarContainer: React.CSSProperties = {
 
 export default function DesktopSidebar() {
     const [pageButtonActive, setPageButtonActive] = useState('feed');
+    const { isMiniDesktop } = styleResponsive()
 
     return (
         <aside style={sidebarStyle}>
             <h1>FrontDevs</h1>
             <nav style={sidebarContainer}>
-                <HomeButton color={pageButtonActive === 'feed' ? "0e0d0d" : "7a7a7a"} active={setPageButtonActive}/>
-                <SearchButton color={pageButtonActive === 'search' ? "0e0d0d" : "7a7a7a"} active={setPageButtonActive}/>
-                
+                <HomeButton color={pageButtonActive === 'feed' ? "0e0d0d" : "7a7a7a"} active={setPageButtonActive} />
+                <SearchButton color={pageButtonActive === 'search' ? "0e0d0d" : "7a7a7a"} active={setPageButtonActive} />
+
+                {
+                    isMiniDesktop &&
+                    <>
+                        <PostButton color="" active={setPageButtonActive} />
+                    </>
+                }
+
             </nav>
         </aside>
     );

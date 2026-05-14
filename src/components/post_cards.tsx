@@ -11,6 +11,7 @@ const likesharecnt: React.CSSProperties = {
 interface pc {
     postByCategory: string
 }
+
 export default function PostCards({ postByCategory }: pc) {
 
     const { isDesktop } = styleResponsive();
@@ -41,7 +42,7 @@ export default function PostCards({ postByCategory }: pc) {
                         </div>
 
                         <div style={{ width: '100%', height: isDesktop ? '350px' : '250px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover' }}>
-                            <img src={dat.img} style={{ width: 'inherit' }} />
+                            <img src={dat.img} style={{ width: 'inherit', height: 'inherit', objectFit: 'cover' }} />
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

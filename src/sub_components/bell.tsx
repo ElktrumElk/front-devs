@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+
 const bellContainer: React.CSSProperties = {
     width: 'auto',
     height: 'auto',
@@ -16,9 +18,10 @@ interface bellProp {
 }
 
 export default function Bell ({color}: bellProp) {
+    const navigate = useNavigate()
     return (
         <>
-            <div style={bellContainer}>
+            <div style={bellContainer} onClick={() => navigate('/user/notification')}>
                 <img style={bellStyles} src={`https://img.icons8.com/?size=100&id=11642&format=png&color=${color.substring(1)}`} alt="bell"/>
             </div>
         </>

@@ -1,12 +1,13 @@
 import type React from "react";
-import { useNavigate } from "react-router-dom";
 import { postsData } from "../data/mockData";
 import { SubPostCard } from "../sub_components/sub_post_cards";
 import StyleUtilities from "../styles/style_utility";
+import { useState } from "react";
+import UserMenuList from "../sub_components/user_profile_menu_list";
 
 // --- INLINE STYLES ---
 const pageWrapper: React.CSSProperties = {
-    width: '90%',
+    width: '100%',
     height: '100%',
     margin: "0 auto",
     padding: "2.5rem 1rem",
@@ -14,14 +15,18 @@ const pageWrapper: React.CSSProperties = {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     color: "#000000",
     gridRow: 'span 2',
-    borderRadius: '1rem'
+    borderRadius: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative'
 };
 
 const headerSection: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginBottom: "1rem"
+    marginBottom: "1rem",
+    width: '100%'
 };
 
 const avatarWrapper: React.CSSProperties = {
@@ -67,51 +72,13 @@ const emailStyle: React.CSSProperties = {
     margin: 0
 };
 
-const menuListContainer: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%"
-};
-
-const menuItemRow: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "1.25rem 0.5rem",
-    borderBottom: "1px solid #f2f2f7",
-    cursor: "pointer",
-    background: "none",
-    borderTop: "none",
-    borderLeft: "none",
-    borderRight: "none",
-    width: "100%",
-    textAlign: "left"
-};
-
-const leftItemBlock: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: "1.25rem"
-};
-
-const labelStyle: React.CSSProperties = {
-    fontSize: "1rem",
-    fontWeight: "500",
-    color: "#000000"
-};
-
-const arrowStyle: React.CSSProperties = {
-    fontSize: "0.85rem",
-    color: "#c7c7cc",
-    fontWeight: "bold"
-};
 
 
 export default function UserProfileMenu() {
-    const navigate = useNavigate();
     const posts = postsData;
     const userPost = posts.filter(x => x.usertag === '@vector_runner');
     const { subPostCards } = StyleUtilities();
+    const [userMenu, showMenu] = useState(false);
 
     const user = {
         name: "Elktrum Elk",
@@ -120,32 +87,19 @@ export default function UserProfileMenu() {
         avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFsZSUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
     };
 
-    // Added explicit destination paths for routing
-    const menuItems = [
-        {
-            label: "Personal Information",
-            path: "/profile/info"
-        },
-        {
-            label: "Posts",
-            path: "/profile/posts"
-        },
-        {
-            label: "Settings",
-
-            path: "/settings"
-        }
-    ];
-
-    const handleLogout = () => {
-        console.log("Logging user out...");
-        navigate("/login", { replace: true });
-    };
-
 
     return (
 
         <div style={pageWrapper}>
+
+            <button onClick={() => showMenu(!userMenu)} style={{ alignSelf: 'flex-end' }}>More</button>
+            {
+                userMenu &&
+                <div onClick={() => showMenu(false)} style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0',  zIndex: '100', background: '#1e1f1f1d'}}>
+                    <UserMenuList />
+                </div>
+            }
+
             {/* Identity Profile Block */}
             <div style={headerSection}>
                 <div style={avatarWrapper}>
@@ -181,33 +135,8 @@ export default function UserProfileMenu() {
             <div>
                 <SubPostCard styles={subPostCards} list={userPost} />
             </div>
-            
-            {/* Menu List Navigation Container */}
-            <nav style={menuListContainer}>
-                {menuItems.map((item, index) => (
-                    <button
-                        key={index}
-                        style={menuItemRow}
-                        onClick={() => navigate(item.path)}
-                    >
-                        <div style={leftItemBlock}>
-                            <span style={labelStyle}>{item.label}</span>
-                        </div>
-                        <span style={arrowStyle}>❯</span>
-                    </button>
-                ))}
 
-                {/* Integrated Logout Row */}
-                <button
-                    style={{ ...menuItemRow, borderBottom: "none" }}
-                    onClick={handleLogout}
-                >
-                    <div style={leftItemBlock}>
-                        <span style={{ ...labelStyle, color: "#ef4444" }}>Logout</span>
-                    </div>
-                    <span style={arrowStyle}>❯</span>
-                </button>
-            </nav>
+            {/*menu list*/}
         </div>
     );
 }

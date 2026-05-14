@@ -90,5 +90,52 @@ export default function StyleUtilities() {
     };
 
 
-    return { footerButton, footerButtonIc, sideBarButton, subPostCards }
+    const menuListContainer: React.CSSProperties = {
+        display: "flex",
+        flexDirection: "column",
+        width: "90%",
+        position: 'absolute',
+        top: '70px',
+        right: '10px',
+        borderRadius: '.5rem',
+        zIndex: '1000',
+        background: 'white',
+        boxShadow: "0 0 10px #e8e4e4"
+        
+    };
+
+    const menuItemRow: React.CSSProperties = {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "1.25rem 0.5rem",
+        borderBottom: "1px solid #f2f2f7",
+        cursor: "pointer",
+        background: "none",
+        borderTop: "none",
+        borderLeft: "none",
+        borderRight: "none",
+        width: "100%",
+        textAlign: "left"
+    };
+
+    const leftItemBlock: React.CSSProperties = {
+        display: "flex",
+        alignItems: "center",
+        gap: "1.25rem"
+    };
+
+    const labelStyle: React.CSSProperties = {
+        fontSize: "1rem",
+        fontWeight: "500",
+        color: "#000000"
+    };
+
+    const arrowStyle: React.CSSProperties = {
+        fontSize: "0.85rem",
+        color: "#c7c7cc",
+        fontWeight: "bold"
+    };
+
+    return { footerButton, footerButtonIc, sideBarButton, subPostCards, menuListContainer, menuItemRow, leftItemBlock, labelStyle, arrowStyle }
 }

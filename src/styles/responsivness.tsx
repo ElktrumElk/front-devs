@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 
 export const styleResponsive = () => {
 
-    const getViewportMode = (): 'mobile' | 'tablet' | 'desktop' => {
+    const getViewportMode = (): 'mobile' | 'tablet' | 'desktop' | 'miniDesktop' => {
         if (typeof window === 'undefined') return 'desktop';
 
         const width = window.innerWidth;
-        if (width <= 750) return 'mobile';
+        if (width <= 500) return 'mobile';
         if (width <= 1024) return 'tablet';
+        if (width <= 1600) return 'miniDesktop';
         return 'desktop';
     };
 
@@ -31,6 +32,7 @@ export const styleResponsive = () => {
     return {
         isMobile: viewportMode === 'mobile',
         isTablet: viewportMode === 'tablet',
-        isDesktop: viewportMode === 'desktop'
+        isDesktop: viewportMode === 'desktop',
+        isMiniDesktop: viewportMode === 'miniDesktop'
     }
 }
