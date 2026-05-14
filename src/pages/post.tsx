@@ -1,7 +1,6 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { categoriesData } from "../sub_components/categories";
-import { styleResponsive } from "../styles/responsivness";
-
+//import { styleResponsive } from "../styles/responsivness";
 
 
 
@@ -28,7 +27,7 @@ export default function AddPost() {
     }
 
     const handleImageSelected = () => {
-        const image = imageSelector.current?.files[0];
+        const image = imageSelector.current?.files?.[0];
 
         if (image.type.startsWith("image/")) {
 
