@@ -53,7 +53,7 @@ export default function AddPost() {
         }, 300)
     }
 
-    const [tag, setTag] = useState([]);
+    const [tag, setTag] = useState<string[]>([]);
     const [addTagPanel, setAddTagPanel] = useState(false);
 
     const handleTag = (tagName: string) => {
