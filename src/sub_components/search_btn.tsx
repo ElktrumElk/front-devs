@@ -16,7 +16,7 @@ export default function SearchButton({ color = '7a7a7a', active }: searchbutton)
 
     const navigate = useNavigate()
     const handleRoute = () => {
-        navigate('/search', { replace: true });
+        navigate('/app/search', { replace: true });
         active('search');
     }
 

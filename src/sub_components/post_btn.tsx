@@ -44,7 +44,7 @@ export default function PostButton({ color = 'ffffff', active }: postbutton) {
 
 
     const handleRoute = () => {
-        navigate('/post');
+        navigate('/app/post');
         active('post');
     }
     return (

@@ -1,3 +1,5 @@
+import { useRef } from "react"
+import { useNavigate } from "react-router-dom"
 
 const logHeader: React.CSSProperties = {
     width: '100%',
@@ -43,25 +45,43 @@ const submitButtont: React.CSSProperties = {
 
 
 
-export default function VerifyEmail () {
+export default function VerifyEmail() {
+
+    const codeInput = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+
+    const handleCodeVerification = (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const code = codeInput.current?.value;
+
+        if (code) {
+            if (code === '123456') {
+                navigate('/app/home');
+            }
+            else {
+                alert('wrong code');
+            }
+        }
+    }
+
     return (
 
         <>
-              <div style={{ display: 'flex', gap: '1rem', background: 'white', flexDirection: 'column', alignItems: 'center', padding: '2rem', width: "80%", maxWidth: '500px', borderRadius: '1rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', background: 'white', flexDirection: 'column', alignItems: 'center', padding: '2rem', width: "80%", maxWidth: '500px', borderRadius: '1rem' }}>
                 <div style={logHeader}>
                     <h1>Verify Email</h1>
                     <p>A code was sent to your email. Please enter the code bellow</p>
                 </div>
 
-                <form style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center'}}>
+                <form onSubmit={(e) => handleCodeVerification(e)} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
 
                     <div style={formInputRow}>
-                        <input style={formInput} placeholder="000000" type="number" required />
+                        <input ref={codeInput} style={formInput} placeholder="000000" type="number" required />
                     </div>
 
                     <button style={submitButtont} type="submit">Verify</button>
                 </form>
-            </div>        
+            </div>
         </>
     )
 }

@@ -17,7 +17,7 @@ export default function HomeButton({ color = '7a7a7a', active }: homebutton) {
     
     const navigate = useNavigate()
     const handleRoute = () => {
-        navigate('/home', { replace: true });
+        navigate('/app/home', { replace: true });
         active('feed');
     }
 

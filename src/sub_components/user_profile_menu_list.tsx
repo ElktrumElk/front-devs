@@ -49,7 +49,7 @@ export default function UserMenuList() {
 
                 {
                     isMiniDesktop &&
-                    <button style={menuItemRow} onClick={() => navigate(!isDesktop ? '/user/notification' : '/home')}>
+                    <button style={menuItemRow} onClick={() => navigate(!isDesktop ? '/app/user/notification' : '/app/home')}>
                         <div style={leftItemBlock}>
                             <Bell color="7a7a7a" />
                             <span style={labelStyle}>Notification</span>
