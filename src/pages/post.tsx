@@ -29,7 +29,8 @@ export default function AddPost() {
     const handleImageSelected = () => {
         const image = imageSelector.current?.files?.[0];
 
-        if (image.type.startsWith("image/")) {
+        
+        if (image?.type.startsWith("image/")) {
 
             requestAnimationFrame(() => {
                 setImageOpacity(1);
