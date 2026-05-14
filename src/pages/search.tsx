@@ -1,6 +1,7 @@
 import { useRef, useState } from "react"
 import { postsData } from "../data/mockData";
 import { SubPostCard } from "../sub_components/sub_post_cards";
+import StyleUtilities from "../styles/style_utility";
 
 interface Post {
     id: number;
@@ -15,6 +16,7 @@ export default function Search() {
 
     const [recentSearch, setRecentSearch] = useState<Post[]>([]);
     const searchInput = useRef<HTMLInputElement>(null);
+    const { subPostCards } = StyleUtilities();
 
     const handleFilter = () => {
         const query = searchInput.current?.value.toLowerCase();
@@ -31,84 +33,27 @@ export default function Search() {
         setRecentSearch(results);
     }
 
-  
+
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
+        <div style={subPostCards.container}>
+            <div style={subPostCards.header}>
                 <h1>Search</h1>
-                <div style={styles.searchBar}>
+                <div style={subPostCards.searchBar}>
                     <img src="https://img.icons8.com/?size=100&id=XU3XKgdpT0qG&format=png&color=7a7a7a" width="24px" height="24px" alt="search" />
                     <input
                         ref={searchInput}
                         placeholder="CSS flexbox"
                         onChange={handleFilter}
-                        style={styles.input}
+                        style={subPostCards.input}
                     />
                 </div>
             </div>
 
-            <div style={styles.resultsHeader}>
+            <div style={subPostCards.resultsHeader}>
                 {recentSearch.length > 0 ? "Results" : "Recent Searches"}
             </div>
 
-            <SubPostCard styles={styles} list={recentSearch} />
+            <SubPostCard styles={subPostCards} list={recentSearch} />
         </div>
     )
 }
-
-// --- Styles Warehouse ---
-const styles: { [key: string]: React.CSSProperties } = {
-    container: { width: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem', backgroundColor: '#f9f9f9' },
-    header: { width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' },
-    searchBar: { width: '100%', display: 'flex', gap: '1rem', background: '#ffffff', borderRadius: '4rem', padding: '0.8rem 1.2rem', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' },
-    input: { flex: '1', border: 'none', outline: 'none', fontSize: '1rem' },
-    resultsHeader: { fontWeight: 'bold', fontSize: '0.9rem', color: '#666', marginTop: '1rem' },
-
-    // Grid Logic
-    grid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)', // Exactly two columns
-        gap: '1rem',
-        marginTop: '0.5rem'
-    },
-    card: {
-        background: '#fff',
-        borderRadius: '12px',
-        overflow: 'hidden',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    imageThumb: {
-        width: '100%',
-        height: '140px',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundColor: '#eee'
-    },
-    cardInfo: {
-        padding: '10px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px'
-    },
-    username: {
-        fontSize: '0.85rem',
-        fontWeight: 'bold',
-        color: '#333',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-    },
-    ratingRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-        fontSize: '0.8rem',
-        color: '#777'
-    },
-    star: {
-        color: '#FFD700', // Gold color
-        fontSize: '1rem'
-    }
-};

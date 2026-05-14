@@ -2,6 +2,7 @@ import type React from "react";
 import { useNavigate } from "react-router-dom";
 import { postsData } from "../data/mockData";
 import { SubPostCard } from "../sub_components/sub_post_cards";
+import StyleUtilities from "../styles/style_utility";
 
 // --- INLINE STYLES ---
 const pageWrapper: React.CSSProperties = {
@@ -105,8 +106,12 @@ const arrowStyle: React.CSSProperties = {
     fontWeight: "bold"
 };
 
+
 export default function UserProfileMenu() {
     const navigate = useNavigate();
+    const posts = postsData;
+    const userPost = posts.filter(x => x.usertag === '@vector_runner');
+    const { subPostCards } = StyleUtilities();
 
     const user = {
         name: "Elktrum Elk",
@@ -133,15 +138,13 @@ export default function UserProfileMenu() {
     ];
 
     const handleLogout = () => {
-        // Clear tokens or state here if needed
         console.log("Logging user out...");
         navigate("/login", { replace: true });
     };
 
-    const posts = postsData;
-    const userPost = posts.filter(x => x.usertag === '@vector_runner');
-    
+
     return (
+
         <div style={pageWrapper}>
             {/* Identity Profile Block */}
             <div style={headerSection}>
@@ -152,8 +155,8 @@ export default function UserProfileMenu() {
                 <h2 style={nameStyle}>{user.name}</h2>
                 <p style={emailStyle}>{user.email}</p>
 
-                <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem'}}>
-                    <button style={{padding: '.8rem 2rem', borderRadius: '1rem', color: 'white', fontSize: '1rem', background: '#010a1b'}}>Get In touch</button>
+                <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
+                    <button style={{ padding: '.8rem 2rem', borderRadius: '1rem', color: 'white', fontSize: '1rem', background: '#010a1b' }}>Get In touch</button>
                 </div>
             </div>
 
@@ -166,17 +169,19 @@ export default function UserProfileMenu() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <strong>200</strong>
-                    <span style={{color: 'GrayText'}}>Followers</span>
+                    <span style={{ color: 'GrayText' }}>Followers</span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <strong>90000</strong>
-                    <span style={{color: 'GrayText'}}>Ratings</span>
+                    <span style={{ color: 'GrayText' }}>Ratings</span>
                 </div>
             </div>
-            
-         
 
+            <div>
+                <SubPostCard styles={subPostCards} list={userPost} />
+            </div>
+            
             {/* Menu List Navigation Container */}
             <nav style={menuListContainer}>
                 {menuItems.map((item, index) => (

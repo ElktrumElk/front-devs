@@ -1,7 +1,6 @@
 import type React from "react";
 import { useState } from "react";
 import HomeButton from "../sub_components/home_btn";
-import PostButton from "../sub_components/post_btn";
 import SearchButton from "../sub_components/search_btn";
 
 const sidebarStyle: React.CSSProperties = {
@@ -24,12 +23,12 @@ const sidebarContainer: React.CSSProperties = {
     marginTop: '2rem'        // Creates room for top branding/logo area
 }
 
-const logoPlaceholder: React.CSSProperties = {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    paddingLeft: '0.5rem',
-    color: '#010a1b'
-}
+// const logoPlaceholder: React.CSSProperties = {
+//     fontSize: '1.5rem',
+//     fontWeight: 'bold',
+//     paddingLeft: '0.5rem',
+//     color: '#010a1b'
+// }
 
 export default function DesktopSidebar() {
     const [pageButtonActive, setPageButtonActive] = useState('feed');

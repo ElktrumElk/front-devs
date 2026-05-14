@@ -1,10 +1,19 @@
 import { convertRate } from "../modules/rate_cnverter";
 
-interface pc {
-    styles: [{}],
-    list: [{id: string}]
-
+interface Post {
+    id: number;
+    username: string;
+    category: string;
+    img: string;
+    description: string;
+    ratings: number; // Added optional rating
 }
+
+interface pc {
+    styles: {[key: string]: React.CSSProperties },
+    list: Post[]
+}
+
 
 export function SubPostCard({ styles, list }: pc) {
 
