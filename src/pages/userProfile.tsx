@@ -4,10 +4,28 @@ import { SubPostCard } from "../sub_components/sub_post_cards";
 import StyleUtilities from "../styles/style_utility";
 import { useState } from "react";
 import UserMenuList from "../sub_components/user_profile_menu_list";
+import { styleResponsive } from "../styles/responsivness";
 
 // --- INLINE STYLES ---
 const pageWrapper: React.CSSProperties = {
     width: '100%',
+    height: '100%',
+    margin: "0 auto",
+    padding: "2.5rem 1rem",
+    background: "#fdfdfd",
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    color: "#000000",
+    gridRow: 'span 2',
+    borderRadius: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative'
+};
+
+
+// --- INLINE STYLES ---
+const pageWrapperMobile: React.CSSProperties = {
+    width: '95%',
     height: '100%',
     margin: "0 auto",
     padding: "2.5rem 1rem",
@@ -79,6 +97,7 @@ export default function UserProfileMenu() {
     const userPost = posts.filter(x => x.usertag === '@vector_runner');
     const { subPostCards } = StyleUtilities();
     const [userMenu, showMenu] = useState(false);
+    const { isMobile } = styleResponsive()
 
     const user = {
         name: "Elktrum Elk",
@@ -90,12 +109,14 @@ export default function UserProfileMenu() {
 
     return (
 
-        <div style={pageWrapper}>
+        <div style={isMobile ? pageWrapperMobile : pageWrapper}>
 
-            <button onClick={() => showMenu(!userMenu)} style={{ alignSelf: 'flex-end' }}>More</button>
+            <button onClick={() => showMenu(!userMenu)} style={{ alignSelf: 'flex-end', background: 'none', padding: '.5rem', border: 'none' }}>
+                <img src="https://img.icons8.com/?size=100&id=20763&format=png&color=7a7a7a" width={"20"} height={"20"}/>
+            </button>
             {
                 userMenu &&
-                <div onClick={() => showMenu(false)} style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0',  zIndex: '100', background: '#1e1f1f1d'}}>
+                <div onClick={() => showMenu(false)} style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0', zIndex: '100', background: '#1e1f1f1d' }}>
                     <UserMenuList />
                 </div>
             }

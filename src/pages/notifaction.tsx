@@ -1,5 +1,6 @@
 import type React from "react";
 import { useState } from "react";
+import { styleResponsive } from "../styles/responsivness";
 
 // --- INLINE STYLES ---
 const panelWrapper: React.CSSProperties = {
@@ -7,7 +8,20 @@ const panelWrapper: React.CSSProperties = {
     height: "500px",
     background: "#ffffff",
     borderRadius: "16px",
-    
+
+    border: "1px solid #e2e8f0",
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    display: "flex",
+    flexDirection: "column",
+    zIndex: 100,
+    justifySelf: 'center'
+};
+
+const panelWrapperMobile: React.CSSProperties = {
+    width: "90%",
+    height: "500px",
+    background: "#ffffff",
+    borderRadius: "16px",
     border: "1px solid #e2e8f0",
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     display: "flex",
@@ -121,6 +135,7 @@ interface Notification {
 }
 
 export default function NotificationPanel() {
+
     // Mock Database State Array
     const [notifications, setNotifications] = useState<Notification[]>([
         { id: "1", message: "Alex liked your recent feed update.", time: "2 mins ago", isUnread: true, type: "like" },
@@ -130,6 +145,7 @@ export default function NotificationPanel() {
     ]);
 
     const unreadCount = notifications.filter(n => n.isUnread).length;
+    const { isMobile } = styleResponsive();
 
     // --- HANDLERS ---
     const handleMarkAsRead = (id: string) => {
@@ -143,11 +159,11 @@ export default function NotificationPanel() {
     };
 
     return (
-        <div style={panelWrapper} className="notify-panel-miniDesktop">
+        <div style={isMobile ? panelWrapperMobile : panelWrapper} className="notify-panel-miniDesktop">
             {/* Panel Top Heading Controls */}
             <div style={panelHeader}>
                 <h3 style={titleStyle}>
-                    Notifications 
+                    Notifications
                     {unreadCount > 0 && <span style={badgeStyle}>{unreadCount}</span>}
                 </h3>
                 {unreadCount > 0 && (
@@ -161,19 +177,19 @@ export default function NotificationPanel() {
             <div style={listContainer}>
                 {notifications.length === 0 ? (
                     <div style={emptyState}>
-                        
+
                         <span>All caught up! No notifications.</span>
                     </div>
                 ) : (
                     notifications.map((item) => (
-                        <div 
-                            key={item.id} 
-                            style={itemStyle(item.isUnread)} 
+                        <div
+                            key={item.id}
+                            style={itemStyle(item.isUnread)}
                             onClick={() => handleMarkAsRead(item.id)}
                         >
                             {/* Unread Active Blue Circle Indicator */}
                             {item.isUnread && <div style={indicatorStyle} />}
-                            
+
                             <div style={contentWrapper}>
                                 <p style={messageStyle}>{item.message}</p>
                                 <span style={timeStyle}>{item.time}</span>
