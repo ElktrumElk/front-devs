@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import {  useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { userAccount } from "../data/accountDB"
 
 const logHeader: React.CSSProperties = {
@@ -58,15 +58,16 @@ export default function Login() {
         const password = userPasswordInput.current?.value;
 
         if (email && password) {
-            if (Database[`${email}`]) {
-                if (Database[`${email}`].password == password) {
-                    navigate('/verifyemail', {replace: true});
-                }
-                else {
+            // Cast Database to any or a Record to bypass the check
+            const user = (Database as any)[email];
+
+            if (user) {
+                if (user.password === password) {
+                    navigate('/verifyemail', { replace: true });
+                } else {
                     alert('invalid Login 2');
                 }
-            }
-            else {
+            } else {
                 alert("Invalid Login 1");
             }
         }
