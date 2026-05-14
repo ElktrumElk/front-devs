@@ -29,7 +29,7 @@ export default function AddPost() {
     const handleImageSelected = () => {
         const image = imageSelector.current?.files?.[0];
 
-        
+
         if (image?.type.startsWith("image/")) {
 
             requestAnimationFrame(() => {
@@ -67,13 +67,17 @@ export default function AddPost() {
     }
 
     const tagInputElement = useRef<HTMLInputElement>(null);
-
+    
     const handleAddTag = () => {
-        const value = tagInputElement.current?.value.length !== 0 ? tagInputElement.current?.value : 'unknown'
+        // Get the value safely, defaulting to an empty string if undefined
+        const rawValue = tagInputElement.current?.value;
+
+        // Ensure value is a string and fallback to 'unknown' if empty or missing
+        const value = rawValue && rawValue.trim().length > 0 ? rawValue : 'unknown';
+
         handleTag(value);
         setCat(prev => [value, ...prev]);
-    }
-
+    };
 
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem' }}>
@@ -100,7 +104,7 @@ export default function AddPost() {
                         isImageSelected &&
                         <>
 
-                            <div style={{ width: '100%', opacity: imageOpacity, transition: 'opacity .4s ease',  background: 'black', borderRadius: '1rem', objectFit: 'cover', overflow: 'hidden', position: 'relative' }}>
+                            <div style={{ width: '100%', opacity: imageOpacity, transition: 'opacity .4s ease', background: 'black', borderRadius: '1rem', objectFit: 'cover', overflow: 'hidden', position: 'relative' }}>
 
                                 <div onClick={destoryImage} style={{ width: '30px', height: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '2rem', background: '#191818bc', backdropFilter: 'blur(10px)', position: 'absolute', right: '10px', top: '10px' }}>
                                     <img src="https://img.icons8.com/?size=100&id=1NVn5K29mOSz&format=png&color=ffffff" width={"20"} height={"20"} alt="cancel" />
