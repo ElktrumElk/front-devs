@@ -26,7 +26,7 @@ export default function UserMenuList() {
     const filterMenuItems = isMobile ? menuItems : menuItems.filter(x => x.label !== 'Posts');
 
     const handleLogout = () => {
-        console.log("Logging user out...");
+        localStorage.clear();
         navigate("/login", { replace: true });
     };
 

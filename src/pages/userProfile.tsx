@@ -2,9 +2,10 @@ import type React from "react";
 import { postsData } from "../data/mockData";
 import { SubPostCard } from "../sub_components/sub_post_cards";
 import StyleUtilities from "../styles/style_utility";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserMenuList from "../sub_components/user_profile_menu_list";
 import { styleResponsive } from "../styles/responsivness";
+import { fetchData } from "../data/fetch_data";
 
 // --- INLINE STYLES ---
 const pageWrapper: React.CSSProperties = {
@@ -90,29 +91,44 @@ const emailStyle: React.CSSProperties = {
     margin: 0
 };
 
-
+interface dat {
+    id: number,
+    username: string,
+    email: string,
+    fullname: string,
+    avatarUrl: string,
+    bio: string,
+    ratings: number,
+    followers: number
+}
 
 export default function UserProfileMenu() {
+
     const posts = postsData;
-    const userPost = posts.filter(x => x.usertag === '@vector_runner');
+    const userTag = localStorage.getItem('data');
+
+    const userPost = posts.filter(x => x.usertag === JSON.parse(userTag).usertag);
     const { subPostCards } = StyleUtilities();
     const [userMenu, showMenu] = useState(false);
-    const { isMobile } = styleResponsive()
+    const { isMobile } = styleResponsive();
+    const [userData, setUserData] = useState<dat>(null);
 
-    const user = {
-        name: "Elktrum Elk",
-        email: "elk@gmail.com",
-        bio: 'I am the Vector Runner',
-        avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFsZSUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
-    };
+    useEffect(() => {
 
+        const f = async () => {
+            const data = await fetchData();
+            const dat = (data as dat)
+            setUserData(dat)
+        }
+        f();
+    }, []);
 
     return (
 
         <div style={isMobile ? pageWrapperMobile : pageWrapper}>
 
             <button onClick={() => showMenu(!userMenu)} style={{ alignSelf: 'flex-end', background: 'none', padding: '.5rem', border: 'none' }}>
-                <img src="https://img.icons8.com/?size=100&id=20763&format=png&color=7a7a7a" width={"20"} height={"20"}/>
+                <img src="https://img.icons8.com/?size=100&id=20763&format=png&color=7a7a7a" width={"20"} height={"20"} />
             </button>
             {
                 userMenu &&
@@ -124,11 +140,11 @@ export default function UserProfileMenu() {
             {/* Identity Profile Block */}
             <div style={headerSection}>
                 <div style={avatarWrapper}>
-                    <img src={user.avatarUrl} alt={user.name} style={avatarImg} />
+                    <img src={userData ? userData.avatarUrl : '...'} alt={''} style={avatarImg} />
                     <div style={verifiedBadge}>✓</div>
                 </div>
-                <h2 style={nameStyle}>{user.name}</h2>
-                <p style={emailStyle}>{user.email}</p>
+                <h2 style={nameStyle}>{userData ? userData.username : '...'}</h2>
+                <p style={emailStyle}>{userData ? userData.email : '...'}</p>
 
                 <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
                     <button style={{ padding: '.8rem 2rem', borderRadius: '1rem', color: 'white', fontSize: '1rem', background: '#010a1b' }}>Get In touch</button>
@@ -137,18 +153,18 @@ export default function UserProfileMenu() {
 
 
             <div style={{ display: 'flex', width: '100%', justifyContent: 'center', color: 'GrayText' }}>
-                <p>{user.bio}</p>
+                <p>{userData ? userData.bio : '...'}</p>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', justifyItems: 'center', marginBlockStart: '2rem', marginBlockEnd: '2rem' }}>
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <strong>200</strong>
+                    <strong>{userData ? userData.followers : '...'}</strong>
                     <span style={{ color: 'GrayText' }}>Followers</span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <strong>90000</strong>
+                    <strong>{userData ? userData.ratings : '...'}</strong>
                     <span style={{ color: 'GrayText' }}>Ratings</span>
                 </div>
             </div>

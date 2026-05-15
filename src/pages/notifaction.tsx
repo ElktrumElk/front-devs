@@ -1,6 +1,7 @@
 import type React from "react";
 import { useState } from "react";
 import { styleResponsive } from "../styles/responsivness";
+import { userNotification } from "../data/user_notification";
 
 // --- INLINE STYLES ---
 const panelWrapper: React.CSSProperties = {
@@ -136,14 +137,12 @@ interface Notification {
 
 export default function NotificationPanel() {
 
-    // Mock Database State Array
-    const [notifications, setNotifications] = useState<Notification[]>([
-        { id: "1", message: "Alex liked your recent feed update.", time: "2 mins ago", isUnread: true, type: "like" },
-        { id: "2", message: "Sarah added a comment on your post: 'Amazing layout!'", time: "1 hour ago", isUnread: true, type: "comment" },
-        { id: "3", message: "Your account profile was synchronized with Fedora securely.", time: "4 hours ago", isUnread: false, type: "system" },
-        { id: "4", message: "New security sign-in detected from Firefox browser configuration.", time: "Yesterday", isUnread: false, type: "system" }
-    ]);
+    const {notify} = userNotification();
+    const data = localStorage.getItem('data');
+    const userTag = JSON.parse(data).usertag.replace("@", '');
 
+    // Mock Database State Array
+    const [notifications, setNotifications] = useState<Notification[]>(notify[userTag]);
     const unreadCount = notifications.filter(n => n.isUnread).length;
     const { isMobile } = styleResponsive();
 

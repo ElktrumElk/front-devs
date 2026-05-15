@@ -1,5 +1,6 @@
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
+import { userAccount } from "../data/accountDB"
 
 const logHeader: React.CSSProperties = {
     width: '100%',
@@ -43,26 +44,45 @@ const submitButtont: React.CSSProperties = {
 
 }
 
-
-
 export default function VerifyEmail() {
 
     const codeInput = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
+    const { Database } = userAccount();
 
     const handleCodeVerification = (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault();
         const code = codeInput.current?.value;
 
         if (code) {
             if (code === '123456') {
-                navigate('/app/home');
+                const email = localStorage.getItem('email');
+
+                if (email) {
+                    const user = (Database)[email]
+                    localStorage.setItem('data', JSON.stringify(user));
+                    navigate('/app/home');
+                }
             }
             else {
                 alert('wrong code');
             }
         }
     }
+
+    const maxMizeCharacter = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        const value = e.target.value;
+
+        if (value.length >= 6) {
+            e.target.value = e.target.value.substring(0, 6);
+        }
+        if (isNaN(parseInt(value))) {
+            e.target.value = value.toString().replace(/[a-z | A-z]/g, '');
+        }
+    }
+
+
 
     return (
 
@@ -76,7 +96,7 @@ export default function VerifyEmail() {
                 <form onSubmit={(e) => handleCodeVerification(e)} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
 
                     <div style={formInputRow}>
-                        <input ref={codeInput} style={formInput} placeholder="000000" type="number" required />
+                        <input ref={codeInput} onChange={(e) => maxMizeCharacter(e)} style={formInput} placeholder="000000" type="text" required />
                     </div>
 
                     <button style={submitButtont} type="submit">Verify</button>

@@ -58,11 +58,12 @@ export default function Login() {
         const password = userPasswordInput.current?.value;
 
         if (email && password) {
-            // Cast Database to any or a Record to bypass the check
-            const user = (Database as any)[email];
+
+            const user = (Database)[email];
 
             if (user) {
                 if (user.password === password) {
+                    localStorage.setItem('email', user.email);
                     navigate('/verifyemail', { replace: true });
                 } else {
                     alert('invalid Login 2');
