@@ -107,11 +107,11 @@ export default function UserProfileMenu() {
     const posts = postsData;
     const userTag = localStorage.getItem('data');
 
-    const userPost = posts.filter(x => x.usertag === JSON.parse(userTag).usertag);
+    const userPost = posts.filter(x => x.usertag === JSON.parse(userTag as string).usertag);
     const { subPostCards } = StyleUtilities();
     const [userMenu, showMenu] = useState(false);
     const { isMobile } = styleResponsive();
-    const [userData, setUserData] = useState<dat>(null);
+    const [userData, setUserData] = useState<dat | null>(null);
 
     useEffect(() => {
 

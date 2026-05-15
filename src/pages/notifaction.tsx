@@ -135,14 +135,17 @@ interface Notification {
     type: "like" | "comment" | "system";
 }
 
+
 export default function NotificationPanel() {
 
-    const {notify} = userNotification();
+    const { notify } = userNotification();
     const data = localStorage.getItem('data');
-    const userTag = JSON.parse(data).usertag.replace("@", '');
+    const parsedData = data ? JSON.parse(data) : null;
+    const userTag = parsedData?.usertag?.replace("@", '') || '';
+
 
     // Mock Database State Array
-    const [notifications, setNotifications] = useState<Notification[]>(notify[userTag]);
+    const [notifications, setNotifications] = useState<Notification[]>(notify[userTag as keyof typeof notify] as Notification[] || []);
     const unreadCount = notifications.filter(n => n.isUnread).length;
     const { isMobile } = styleResponsive();
 
