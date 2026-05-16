@@ -21,7 +21,7 @@ const imageSliderSection: React.CSSProperties = {
     gap: '1rem'
 }
 
-export default function Home({setIsViewCard, setViewCardId}) {
+export default function Home({setIsViewCard, setViewCardId, setViewComment, setCommentId}) {
 
     /**Post By category */
     const [pbc, setpbc] = useState('All');
@@ -45,7 +45,7 @@ export default function Home({setIsViewCard, setViewCardId}) {
 
                 <section id="post-feeds" style={{ width: '100%' }}>
                     <div style={{ display: 'flex', width: '100%', flexDirection: 'column', gap: '1rem' }}>
-                        <PostCards postByCategory={pbc} expand={setIsViewCard} cardId={setViewCardId} />
+                        <PostCards postByCategory={pbc} expand={setIsViewCard} cardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId}/>
                     </div>
                 </section>
             </div>

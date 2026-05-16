@@ -5,16 +5,19 @@ const likesharecnt: React.CSSProperties = {
     display: 'flex',
     gap: '.2rem',
     color: 'gray',
-    alignItems: 'center'
+    alignItems: 'center',
+    cursor: 'pointer'
 }
 
 interface pc {
     postByCategory: string,
     expand: React.Dispatch<React.SetStateAction<boolean>>,
     cardId: React.Dispatch<React.SetStateAction<number>>,
+    setViewComment: React.Dispatch<React.SetStateAction<boolean>>,
+    setCommentId: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function PostCards({ postByCategory, expand, cardId }: pc) {
+export default function PostCards({ postByCategory, expand, cardId, setViewComment, setCommentId }: pc) {
 
     const { isDesktop } = styleResponsive();
 
@@ -62,7 +65,7 @@ export default function PostCards({ postByCategory, expand, cardId }: pc) {
                                 <img src="https://img.icons8.com/?size=100&id=104&format=png&color=000000" width="20px" height="20px" alt="ratings" />
                                 <span>{dat.ratings}</span>
                             </div>
-                            <div style={likesharecnt}>
+                            <div style={likesharecnt} onClick={() => {setViewComment(true); setCommentId(dat.postId)}}>
                                 <img src="https://img.icons8.com/?size=100&id=143&format=png&color=000000" width="20px" height="20px" alt="comment" />
                                 <span>{dat.comment}</span>
                             </div>

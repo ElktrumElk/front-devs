@@ -10,6 +10,7 @@ import UserProfile from './userProfile';
 import NotificationPanel from './notifaction';
 import { useEffect, useState } from 'react';
 import ViewCard from '../sub_components/view_card';
+import ViewCommentPanel from '../sub_components/view_comments';
 
 
 
@@ -61,16 +62,19 @@ export default function MainPage() {
     const isDesktop = !isMobile && !isTablet && !isMiniDesktop;
     const [isViewCard, setIsViewCard] = useState(false);
     const [viewCardId, setViewCardId] = useState<number>(null);
+    const [isViewComment, setViewComment] = useState<boolean>(false);
+    const [commentId, setCommentId] = useState<number>(null);
 
     useEffect(() => {
         isViewCard ? document.body.classList.add('fixed') : document.body.classList.remove('fixed')
         console.log(isViewCard)
-    }, [viewCardId, isViewCard])
+    }, [viewCardId, isViewCard, isViewComment])
 
     return (
         <>
             <div className={isViewCard ? 'mainCnt' : ''} style={isDesktop ? subWrapperDesktop : isMiniDesktop ? subWrapperDesktopMini : subWrapperMobile}>
                 {isViewCard && <ViewCard setPanelOpen={setIsViewCard} postId={viewCardId} />}
+                {isViewComment && <ViewCommentPanel setPanelOpen={setViewComment} commentId={commentId}/>}
 
                 {isDesktop && <DesktopSidebar />}
                 {isMiniDesktop && <DesktopSidebar />}
@@ -79,11 +83,11 @@ export default function MainPage() {
 
                 <div style={isTablet ? subWrapperTablet : subWrapperMobile} className='subWrapper'>
                     <Routes>
-                        <Route path='/home' element={<Home setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} />} />
+                        <Route path='/home' element={<Home setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId}/>} />
                         <Route path='/post' element={<AddPost />} />
                         <Route path='/search' element={<Search />} />
                         <Route path='/user/profile' element={<UserProfile />} />
-                        <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} />} />
+                        <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId}/>} />
                     </Routes>
                 </div>
 

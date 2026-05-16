@@ -2,6 +2,7 @@ import { useRef } from "react"
 import GetIntouchButton from "./get_in_touch_btn"
 import { getPostsByID } from "../data/get_post_data"
 import { styleResponsive } from "../styles/responsivness";
+import { ProgressBar } from "./progress_bar";
 
 interface viewcardProps {
     setPanelOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -10,11 +11,12 @@ interface viewcardProps {
 
 export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
 
+    /**The background Element */
     const bk = useRef<HTMLDivElement>(null);
-    const { isMobile } = styleResponsive()
+    const { isMobile } = styleResponsive() // mobile users
 
+    /** Handle close of the view card */
     const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
-
         if (bk) {
             if (e.target === bk.current) {
                 setPanelOpen(false);
@@ -22,13 +24,28 @@ export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
         }
         return;
     }
+    const handleCloseMobile = () => {
 
-    const [cardData] = getPostsByID(postId)
+        setPanelOpen(false);
+        return;
+    }
+
+    /** Data that is render on the view card */
+    const [cardData] = getPostsByID(postId);
+    const ratingsCount = [8, 10, 3, 1, 6]
+    const tRatings  = 8 + 10 + 3 + 1 + 6;
+    const displayRatings = tRatings / 5
+    const handleRatings = (value: number) => {
+        console.log(value / 5 * 100)
+        return value / Math.max(...ratingsCount) * 100;
+        
+    }
 
     return (
         <>
             <div className="backgroundContainer" ref={bk} style={styles.backgroundContainer} onClick={(e) => handleClose(e)}>
-                <div className="viewCard" style={styles.viewCard}>
+                <div className="viewCard viewCardMobile" style={styles.viewCard}>
+                    <button style={{ alignSelf: 'flex-end', background: '#282828', border: 'none', padding: '.4rem', borderRadius: '1rem', color: 'white'}} onClick={handleCloseMobile}>Close</button>
                     <header style={styles.header}>
                         <div className="profileNameCnt" style={styles.profileNameCnt}>
                             <div style={styles.profileImageCnt}>
@@ -68,7 +85,45 @@ export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
                         </div>
                     </article>
 
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', padding: '.2rem', borderRadius: '1rem', background: '#f5f5f5', marginBottom: '1rem', justifyContent: 'space-between' }}>
+                    <div className="ratingCnt" style={{display: 'flex', flexDirection: 'column', width: '100%', marginBlockStart: '3rem', marginBlockEnd: '3rem'}}>
+                        <h5>Ratings</h5>
+                        <div style={{ width: '90%', display: 'flex', gap: '.5rem', background: '#f5f5f5', alignItems: 'center', padding: '.5rem' }}>
+                            <div style={{ width: '10rem', height: '10rem', borderRadius: '1rem', background: '#dedbdb', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                <span style={{ fontSize: '3rem', color: 'GrayText' }}>{displayRatings.toFixed(1)}</span>
+                            </div>
+                            <div style={{ flex: '1', display: 'flex' }}>
+                                <ul style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', width: '100%' }}>
+
+                                    <li style={styles.ulList}>
+                                        <span>5</span>
+                                        <ProgressBar value={handleRatings(8)}/>
+                                        <span>8</span>
+                                    </li>
+                                    <li style={styles.ulList}>
+                                        <span>4</span>
+                                        <ProgressBar value={handleRatings(10)}/>
+                                        <span>10</span>
+                                    </li>
+                                    <li style={styles.ulList}>
+                                        <span>3</span>
+                                        <ProgressBar value={handleRatings(3)}/>
+                                        <span>3</span>
+                                    </li>
+                                    <li style={styles.ulList}>
+                                        <span>2</span>
+                                        <ProgressBar value={handleRatings(1)}/>
+                                        <span>1</span>
+                                    </li>
+                                    <li style={styles.ulList}>
+                                        <span>1</span>
+                                        <ProgressBar value={handleRatings(6)}/>
+                                        <span>6</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="buttonCnt" style={{ display: 'flex', alignItems: 'center', width: '100%', padding: '.2rem', borderRadius: '1rem', background: '#f5f5f5', marginBottom: '1rem', justifyContent: 'space-between', }}>
                         <input style={{ width: '100%', padding: '1rem', fontSize: '20px', outline: 'none', background: 'none', border: 'none' }} placeholder="Leave A comment" />
                         <button style={{ background: 'rgb(10, 0, 17)', width: '100px', padding: '1rem', border: 'none', borderRadius: '1rem', color: '#fff' }}>Send</button>
                     </div>
@@ -100,7 +155,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         padding: '1rem',
         background: '#fff',
         borderRadius: '1rem',
-        gap: '2rem',
+        gap: '.5rem',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -113,7 +168,8 @@ const styles: { [key: string]: React.CSSProperties } = {
         padding: '.3rem',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: '1rem'
     },
 
     profileNameCnt: {
@@ -185,6 +241,15 @@ const styles: { [key: string]: React.CSSProperties } = {
         width: '100%',
         height: '100%',
         objectFit: 'cover'
+    },
+
+    ulList: {
+        display: 'grid',
+        gridTemplateColumns: '.1fr 1fr .1fr',
+        gap: '.3rem',
+        alignItems: 'center',
+        width: '100%',
+        textAlign: 'right'
     }
 
 }
