@@ -8,6 +8,8 @@ import { styleResponsive } from '../styles/responsivness';
 import DesktopSidebar from '../components/desktop_side_bar';
 import UserProfile from './userProfile';
 import NotificationPanel from './notifaction';
+import { useEffect, useState } from 'react';
+import ViewCard from '../sub_components/view_card';
 
 
 
@@ -54,49 +56,57 @@ const subWrapperTablet: React.CSSProperties = {
 }
 
 export default function MainPage() {
+
     const { isMobile, isTablet, isMiniDesktop } = styleResponsive();
     const isDesktop = !isMobile && !isTablet && !isMiniDesktop;
+    const [isViewCard, setIsViewCard] = useState(false);
+    const [viewCardId, setViewCardId] = useState<number>(null);
+
+    useEffect(() => {
+        isViewCard ? document.body.classList.add('fixed') : document.body.classList.remove('fixed')
+        console.log(isViewCard)
+    }, [viewCardId, isViewCard])
 
     return (
         <>
-          
-                <div style={isDesktop ? subWrapperDesktop : isMiniDesktop ? subWrapperDesktopMini : subWrapperMobile}>
+            <div className={isViewCard ? 'mainCnt' : ''} style={isDesktop ? subWrapperDesktop : isMiniDesktop ? subWrapperDesktopMini : subWrapperMobile}>
+                {isViewCard && <ViewCard setPanelOpen={setIsViewCard} postId={viewCardId} />}
 
-                    {isDesktop && <DesktopSidebar />}
-                    {isMiniDesktop && <DesktopSidebar />}
-                    {!isDesktop && !isMiniDesktop && <Header />}
+                {isDesktop && <DesktopSidebar />}
+                {isMiniDesktop && <DesktopSidebar />}
+                {!isDesktop && !isMiniDesktop && <Header />}
 
 
-                    <div style={isTablet ? subWrapperTablet : subWrapperMobile} className='subWrapper'>
-                        <Routes>
-                            <Route path='/home' element={<Home />} />
-                            <Route path='/post' element={<AddPost />} />
-                            <Route path='/search' element={<Search />} />
-                            <Route path='/user/profile' element={<UserProfile />} />
-                            <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home />} />
-                        </Routes>
-                    </div>
-
-                    <div style={{ gridRow: 'span 2', width: "100%", overflowY: 'auto', display: !isDesktop && isMiniDesktop ? 'none' : 'flex', flexDirection: "column", alignItems: "center", padding: "1rem", gap: '1rem' }}>
-                        {
-                            isDesktop && !isMiniDesktop &&
-                            <>
-                                <NotificationPanel />
-                                <div style={{ width: '100%', background: '#ffffff', padding: '.5rem' }}>
-                                    <AddPost />
-                                </div>
-                            </>
-                        }
-                    </div>
-
-                    {isDesktop && <UserProfile />}
-                    {isMiniDesktop && <UserProfile />}
-
+                <div style={isTablet ? subWrapperTablet : subWrapperMobile} className='subWrapper'>
+                    <Routes>
+                        <Route path='/home' element={<Home setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} />} />
+                        <Route path='/post' element={<AddPost />} />
+                        <Route path='/search' element={<Search />} />
+                        <Route path='/user/profile' element={<UserProfile />} />
+                        <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} />} />
+                    </Routes>
                 </div>
-                {
-                    !isDesktop && !isMiniDesktop &&
-                    <MobileFooter />
-                }
+
+                <div style={{ gridRow: 'span 2', width: "100%", overflowY: 'auto', display: !isDesktop && isMiniDesktop ? 'none' : 'flex', flexDirection: "column", alignItems: "center", padding: "1rem", gap: '1rem' }}>
+                    {
+                        isDesktop && !isMiniDesktop &&
+                        <>
+                            <NotificationPanel />
+                            <div style={{ width: '100%', background: '#ffffff', padding: '.5rem' }}>
+                                <AddPost />
+                            </div>
+                        </>
+                    }
+                </div>
+
+                {isDesktop && <UserProfile />}
+                {isMiniDesktop && <UserProfile />}
+
+            </div>
+            {
+                !isDesktop && !isMiniDesktop &&
+                <MobileFooter />
+            }
         </>
     )
 }

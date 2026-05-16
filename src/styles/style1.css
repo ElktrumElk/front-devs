@@ -5,7 +5,6 @@
     font-family: sans-serif;
 }
 
-html,
 body {
     overflow-x: hidden;
     min-height: 100dvh;
@@ -15,6 +14,9 @@ body {
     padding-bottom: 2rem;
 }
 
+ body.fixed {
+    overflow-y: hidden;
+}
 #root {
     display: flex;
     flex-direction: column;
@@ -36,6 +38,9 @@ body {
     height: 100%;
 }
 
+.mainCnt {
+    overflow-y: hidden !important;
+}
 
 
 @media (min-width: 1024px) {
@@ -65,4 +70,22 @@ body {
     .notify-panel-miniDesktop {
         margin-top: 1rem !important;
     }
+}
+
+@media (max-width: 818px) {
+    .viewCard {
+        width: 100% !important;
+
+    }
+
+    .backgroundContainer {
+        padding-inline-start: 10px !important;
+        padding-inline-end: 10px !important;
+    }
+
+    .profileNameCnt {
+        font-size: .9rem !important;
+        line-height: .9rem !important;
+    }
+  
 }

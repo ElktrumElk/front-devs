@@ -9,10 +9,12 @@ const likesharecnt: React.CSSProperties = {
 }
 
 interface pc {
-    postByCategory: string
+    postByCategory: string,
+    expand: React.Dispatch<React.SetStateAction<boolean>>,
+    cardId: React.Dispatch<React.SetStateAction<number>>,
 }
 
-export default function PostCards({ postByCategory }: pc) {
+export default function PostCards({ postByCategory, expand, cardId }: pc) {
 
     const { isDesktop } = styleResponsive();
 
@@ -41,7 +43,7 @@ export default function PostCards({ postByCategory }: pc) {
                             </div>
                         </div>
 
-                        <div style={{ width: '100%', height: isDesktop ? '350px' : '250px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover' }}>
+                        <div onClick={() => { expand(true); cardId(dat.id) }} style={{ width: '100%', cursor: 'pointer', height: isDesktop ? '350px' : '250px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover' }}>
                             <img src={dat.img} style={{ width: 'inherit', height: 'inherit', objectFit: 'cover' }} />
                         </div>
 

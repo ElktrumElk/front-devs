@@ -61,6 +61,7 @@ export default function VerifyEmail() {
                 if (email) {
                     const user = (Database)[email]
                     localStorage.setItem('data', JSON.stringify(user));
+                    localStorage.setItem('isEmailVerify', 'true');
                     navigate('/app/home');
                 }
             }
@@ -81,7 +82,7 @@ export default function VerifyEmail() {
             e.target.value = value.toString().replace(/[a-z | A-z]/g, '');
         }
     }
-
+    
 
 
     return (

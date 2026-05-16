@@ -1,6 +1,7 @@
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { userAccount } from "../data/accountDB"
+import { styleResponsive } from "../styles/responsivness"
 
 const logHeader: React.CSSProperties = {
     width: '100%',
@@ -48,6 +49,7 @@ export default function Login() {
     const navigate = useNavigate();
     const userEmailInput = useRef<HTMLInputElement>(null);
     const userPasswordInput = useRef<HTMLInputElement>(null);
+    const { isMobile } = styleResponsive();
 
     const { Database } = userAccount();
 
@@ -64,7 +66,10 @@ export default function Login() {
             if (user) {
                 if (user.password === password) {
                     localStorage.setItem('email', user.email);
-                    navigate('/verifyemail', { replace: true });
+                    localStorage.setItem('isLogin', 'true');
+
+                    navigate('/verifyemail', {replace: true});
+                    
                 } else {
                     alert('invalid Login 2');
                 }
@@ -74,10 +79,11 @@ export default function Login() {
         }
 
     }
+    
 
     return (
         <>
-            <div style={{ display: 'flex', gap: '1rem', background: 'white', flexDirection: 'column', alignItems: 'center', padding: '2rem', width: "80%", maxWidth: '500px', borderRadius: '1rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', background: 'white', flexDirection: 'column', alignItems: 'center', padding: '2rem', width: isMobile ? '95%' : "80%", maxWidth: '500px', borderRadius: '1rem' }}>
                 <div style={logHeader}>
                     <h1>Login</h1>
                     <p>Please fill in the form to continue</p>

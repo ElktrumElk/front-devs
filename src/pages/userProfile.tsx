@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import UserMenuList from "../sub_components/user_profile_menu_list";
 import { styleResponsive } from "../styles/responsivness";
 import { fetchData } from "../data/fetch_data";
+import GetIntouchButton from "../sub_components/get_in_touch_btn";
 
 // --- INLINE STYLES ---
 const pageWrapper: React.CSSProperties = {
@@ -107,7 +108,7 @@ export default function UserProfileMenu() {
     const posts = postsData;
     const userTag = localStorage.getItem('data');
 
-    const userPost = posts.filter(x => x.usertag === JSON.parse(userTag as string).usertag);
+    const userPost = posts.filter(x => x.usertag === JSON.parse(userTag as string)?.usertag);
     const { subPostCards } = StyleUtilities();
     const [userMenu, showMenu] = useState(false);
     const { isMobile } = styleResponsive();
@@ -147,7 +148,7 @@ export default function UserProfileMenu() {
                 <p style={emailStyle}>{userData ? userData.email : '...'}</p>
 
                 <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
-                    <button style={{ padding: '.8rem 2rem', borderRadius: '1rem', color: 'white', fontSize: '1rem', background: '#010a1b' }}>Get In touch</button>
+                    <GetIntouchButton />
                 </div>
             </div>
 
