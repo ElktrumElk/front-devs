@@ -1,10 +1,14 @@
-import { useRef } from "react"
+import { useRef, type SetStateAction } from "react"
 import { UserComment } from "../data/comments";
 import { postsData } from "../data/mockData";
 import { useState } from "react";
 
+interface viewcomment {
+    setPanelOpen: React.Dispatch<SetStateAction<boolean>>,
+    commentId: string
+}
 
-export default function ViewCommentPanel({ setPanelOpen, commentId }) {
+export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcomment) {
     const a = [{
         id: 0,
         userCommentName: '',

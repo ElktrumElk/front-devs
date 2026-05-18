@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 
+interface RateCardProps {
+  isRate?: boolean;
+}
 
-
-export default function RateCard({ isRate }) {
+export default function RateCard({ isRate = false }: RateCardProps) {
     const rates = [1, 2, 3, 4, 5];
-    const [isClicked, setClicked] = useState(1);
-    const [isClickedbool, setClickedbool] = useState(true);
-    const [rateCardScale, setScale] = useState(0);
+    const [isClicked, setClicked] = useState<number>(1);
+    const [isClickedbool, setClickedbool] = useState<boolean>(true);
+    const [rateCardScale, setScale] = useState<number>(0);
 
     const handleClick = (v: number) => {
         setClicked(v);
@@ -21,7 +23,6 @@ export default function RateCard({ isRate }) {
         setScale(rateCardScale === 0 ? 1 : 0)
     }, []);
     
-
     return (
         <>
             <div style={{ display: 'flex', transform: `scale(${rateCardScale})`, transition: 'transform .4s ease', padding: '.4rem', borderRadius: '1rem', gap: '1rem', cursor: 'pointer', boxShadow: '0 0 1rem #4a484897', width: 'fit-content' }}>

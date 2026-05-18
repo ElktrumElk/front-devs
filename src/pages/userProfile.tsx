@@ -2,7 +2,7 @@ import type React from "react";
 import { postsData } from "../data/mockData";
 import { SubPostCard } from "../sub_components/sub_post_cards";
 import StyleUtilities from "../styles/style_utility";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type SetStateAction } from "react";
 import UserMenuList from "../sub_components/user_profile_menu_list";
 import { styleResponsive } from "../styles/responsivness";
 import { fetchData } from "../data/fetch_data";
@@ -103,7 +103,12 @@ interface dat {
     followers: number
 }
 
-export default function UserProfileMenu({expandPost, postId}) {
+interface userprofile {
+    expandPost: React.Dispatch<SetStateAction<boolean>>,
+    postId: React.Dispatch<SetStateAction<number>>
+}
+
+export default function UserProfileMenu({ expandPost, postId }: userprofile) {
 
     const posts = postsData;
     const userTag = localStorage.getItem('data');
@@ -148,7 +153,7 @@ export default function UserProfileMenu({expandPost, postId}) {
                 <p style={emailStyle}>{userData ? userData.email : '...'}</p>
 
                 <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
-                    <GetIntouchButton isResponsive={false}/>
+                    <GetIntouchButton isResponsive={false} />
                 </div>
             </div>
 
@@ -171,7 +176,7 @@ export default function UserProfileMenu({expandPost, postId}) {
             </div>
 
             <div>
-                <SubPostCard styles={subPostCards} list={userPost} expand={expandPost} cardId={postId}/>
+                <SubPostCard styles={subPostCards} list={userPost} expand={expandPost} cardId={postId} />
             </div>
 
             {/*menu list*/}

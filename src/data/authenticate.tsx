@@ -1,4 +1,4 @@
-const isLogin = new Promise<boolean | string>((resolve) => {
+const isLogin = new Promise<boolean | string | null>((resolve) => {
 
     const data = localStorage.getItem('isLogin');
     console.log(data)
@@ -15,7 +15,7 @@ const isLogin = new Promise<boolean | string>((resolve) => {
     }
 });
 
-const isVerified = new Promise<boolean | string>((resolve) => {
+const isVerified = new Promise<boolean | string | null>((resolve) => {
     const info = localStorage.getItem('isEmailVerify');
 
     if (info === null) {

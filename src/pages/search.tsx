@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { postsData } from "../data/mockData";
 import { SubPostCard } from "../sub_components/sub_post_cards";
 import StyleUtilities from "../styles/style_utility";
@@ -9,10 +9,15 @@ interface Post {
     category: string;
     img: string;
     description: string;
-    ratings: number; // Added optional rating
+    ratings: number;
 }
 
-export default function Search({setIsViewCard, setViewCardId}) {
+interface SearchProps {
+    setIsViewCard: Dispatch<SetStateAction<boolean>>;
+    setViewCardId: Dispatch<SetStateAction<number | null>>;
+}
+
+export default function Search({ setIsViewCard, setViewCardId }: SearchProps) {
 
     const [recentSearch, setRecentSearch] = useState<Post[]>([]);
     const searchInput = useRef<HTMLInputElement>(null);
