@@ -103,7 +103,7 @@ interface dat {
     followers: number
 }
 
-export default function UserProfileMenu() {
+export default function UserProfileMenu({expandPost, postId}) {
 
     const posts = postsData;
     const userTag = localStorage.getItem('data');
@@ -148,7 +148,7 @@ export default function UserProfileMenu() {
                 <p style={emailStyle}>{userData ? userData.email : '...'}</p>
 
                 <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
-                    <GetIntouchButton />
+                    <GetIntouchButton isResponsive={false}/>
                 </div>
             </div>
 
@@ -171,7 +171,7 @@ export default function UserProfileMenu() {
             </div>
 
             <div>
-                <SubPostCard styles={subPostCards} list={userPost} />
+                <SubPostCard styles={subPostCards} list={userPost} expand={expandPost} cardId={postId}/>
             </div>
 
             {/*menu list*/}

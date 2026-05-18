@@ -10,7 +10,8 @@ export default function StyleUtilities() {
         color: 'gray',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        cursor: 'pointer'
     }
 
     const footerButtonIc: React.CSSProperties = {
@@ -27,7 +28,8 @@ export default function StyleUtilities() {
         color: 'gray',
         display: 'flex',
         alignItems: 'center',
-        gap: '1rem'
+        gap: '1rem',
+        cursor: 'pointer'
     }
 
 
@@ -53,7 +55,8 @@ export default function StyleUtilities() {
             overflow: 'hidden',
             boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            cursor: 'pointer'
         },
         imageThumb: {
             width: '100%',

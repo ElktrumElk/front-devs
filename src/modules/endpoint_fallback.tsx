@@ -15,7 +15,6 @@ export function userFallBack(validating: React.Dispatch<React.SetStateAction<boo
     }
 
     useEffect(() => {
-        console.log('running...');
         const a = async () => {
             const { loginResponse, emailResponse } = await userAuthentication();
             const handleValidation = () => {
@@ -31,7 +30,6 @@ export function userFallBack(validating: React.Dispatch<React.SetStateAction<boo
             }
 
             handleRoute(handleValidation())
-
         };
 
         a();

@@ -12,11 +12,12 @@ interface Post {
     ratings: number; // Added optional rating
 }
 
-export default function Search() {
+export default function Search({setIsViewCard, setViewCardId}) {
 
     const [recentSearch, setRecentSearch] = useState<Post[]>([]);
     const searchInput = useRef<HTMLInputElement>(null);
     const { subPostCards } = StyleUtilities();
+    
 
     const handleFilter = () => {
         const query = searchInput.current?.value.toLowerCase();
@@ -53,7 +54,7 @@ export default function Search() {
                 {recentSearch.length > 0 ? "Results" : "Recent Searches"}
             </div>
 
-            <SubPostCard styles={subPostCards} list={recentSearch} />
+            <SubPostCard styles={subPostCards} list={recentSearch} expand={setIsViewCard} cardId={setViewCardId} />
         </div>
     )
 }

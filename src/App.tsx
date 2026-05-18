@@ -8,26 +8,18 @@ import SplashScreen from "./pages/splash_screen";
 export default function App() {
 
   const { setOnValidation, onValidation } = useValidation();
- 
+
   userFallBack(setOnValidation);
 
   if (onValidation) {
-
-    console.log('Validating...', onValidation)
     return <div className="app">
       <SplashScreen />
     </div>
-
-  }
-  else {
-    console.log('validating...', onValidation)
   }
 
-  
   return (
     <>
       <div className='app'>
-       
         <Routes>
           <Route path="/*" element={<DefaultPage />} />
           <Route path="/app/*" element={<MainPage />}></Route>

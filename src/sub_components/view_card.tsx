@@ -36,7 +36,6 @@ export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
     const tRatings  = 8 + 10 + 3 + 1 + 6;
     const displayRatings = tRatings / 5
     const handleRatings = (value: number) => {
-        console.log(value / 5 * 100)
         return value / Math.max(...ratingsCount) * 100;
         
     }

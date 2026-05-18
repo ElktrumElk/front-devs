@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { postsData } from "../data/mockData"
 import { styleResponsive } from "../styles/responsivness";
+import RateCard from "../sub_components/rate_card";
 
 const likesharecnt: React.CSSProperties = {
     display: 'flex',
@@ -19,16 +21,21 @@ interface pc {
 
 export default function PostCards({ postByCategory, expand, cardId, setViewComment, setCommentId }: pc) {
 
-    const { isDesktop } = styleResponsive();
-
-
     const postData = postByCategory === 'All' ? postsData : postsData.filter(post => post.category === postByCategory)
+    const { isDesktop } = styleResponsive();
+    const [israting, setDisplayRating] = useState(false);
+    const [isRate, setRate] = useState(false);
+    const [isPostId, setPostId] = useState(null);
+
+    const handleRatingTogglePanel = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.target === e.currentTarget) { setDisplayRating(false) }
+    }
 
     return (
         <>
             {
                 postData.map((dat, idx) => (
-                    <div key={idx} style={{ width: '100%', borderRadius: '10px', background: 'white', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div onClick={(e) => handleRatingTogglePanel(e)} key={idx} style={{ width: '100%', borderRadius: '10px', background: 'white', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
                         <div style={{ width: '100%', padding: '.4rem', display: 'flex', justifyContent: 'space-between' }}>
 
@@ -60,12 +67,14 @@ export default function PostCards({ postByCategory, expand, cardId, setViewComme
                             <p style={{ color: '#5c5c5c' }}>{dat.description}</p>
                         </article>
 
+                        {israting && isPostId === dat.id && <RateCard isRate={isRate}/>}
+
                         <div style={{ width: '100%', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                            <div style={likesharecnt}>
-                                <img src="https://img.icons8.com/?size=100&id=104&format=png&color=000000" width="20px" height="20px" alt="ratings" />
+                            <div style={likesharecnt} onClick={() => { setDisplayRating(true); setPostId(dat.id) }}>
+                                <img onClick={() => setRate(!isRate)} src={`https://img.icons8.com/?size=100&id=104&format=png&color=${isRate ? 'dfbf06' : '7a7a7a'}`} width="20px" height="20px" alt="ratings" />
                                 <span>{dat.ratings}</span>
                             </div>
-                            <div style={likesharecnt} onClick={() => {setViewComment(true); setCommentId(dat.postId)}}>
+                            <div style={likesharecnt} onClick={() => { setViewComment(true); setCommentId(dat.postId) }}>
                                 <img src="https://img.icons8.com/?size=100&id=143&format=png&color=000000" width="20px" height="20px" alt="comment" />
                                 <span>{dat.comment}</span>
                             </div>

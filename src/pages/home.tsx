@@ -26,7 +26,6 @@ export default function Home({setIsViewCard, setViewCardId, setViewComment, setC
     /**Post By category */
     const [pbc, setpbc] = useState('All');
 
-
     return (
         <>
             

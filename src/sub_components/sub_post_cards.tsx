@@ -1,3 +1,4 @@
+import type { SetStateAction } from "react";
 import { convertRate } from "../modules/rate_cnverter";
 
 interface Post {
@@ -11,11 +12,13 @@ interface Post {
 
 interface pc {
     styles: {[key: string]: React.CSSProperties },
-    list: Post[]
+    list: Post[],
+    expand: React.Dispatch<SetStateAction<boolean>>,
+    cardId: React.Dispatch<SetStateAction<number>>
 }
 
 
-export function SubPostCard({ styles, list }: pc) {
+export function SubPostCard({ styles, list, expand, cardId }: pc) {
 
     return (
         <>
@@ -23,7 +26,7 @@ export function SubPostCard({ styles, list }: pc) {
             < div style={styles.grid} >
                 {
                     list.map((post) => (
-                        <div key={post.id} style={styles.card}>
+                        <div key={post.id} style={styles.card} onClick={() => {expand(true); cardId(post.id)}}>
                             <div style={{ ...styles.imageThumb, backgroundImage: `url(${post.img})` }} />
                             <div style={styles.cardInfo}>
                                 <span style={styles.username}>{post.username}</span>
