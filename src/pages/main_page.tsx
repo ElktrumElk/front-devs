@@ -68,7 +68,8 @@ export default function MainPage() {
     const [cardScale, setCardScale] = useState<number>(1);
 
     useEffect(() => {
-        isViewCard ? document.body.classList.add('fixed') : document.body.classList.remove('fixed')
+        isViewCard ? document.body.classList.add('fixed') : document.body.classList.remove('fixed');
+        console.log(isViewCard)
     }, [viewCardId, isViewCard, isViewComment])
 
     return (

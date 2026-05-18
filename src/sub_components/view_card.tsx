@@ -62,8 +62,8 @@ export default function ViewCard({setCardScale, setPanelOpen, postId, viewCardCo
 
     return (
         <>
-            <div className="backgroundContainer" ref={bk} style={styles.backgroundContainer} onClick={(e) => {handleClose(e); setCardScale(1)}}>
-                <div className="viewCard viewCardMobile" style={{ ...styles.viewCard, transform: `scale(${pop})`, transition: 'transform .2s ease', transformOrigin: `${viewCardCoordinate.x}px ${viewCardCoordinate.y}px` }}>
+            <div className="backgroundContainer" ref={bk} style={{...styles.backgroundContainer}} onClick={(e) => {handleClose(e); setCardScale(1)}}>
+                <div className="viewCard viewCardMobile" style={{ ...styles.viewCard,  transform: `scale(${pop})`, transition: 'transform .2s ease', transformOrigin: isMobile ? `center ${viewCardCoordinate.y}` : `${viewCardCoordinate.x}px ${viewCardCoordinate.y}px`}}>
                     <button style={{ alignSelf: 'flex-end', background: '#282828', border: 'none', padding: '.4rem', borderRadius: '1rem', color: 'white' }} onClick={handleCloseMobile}>Close</button>
                     <header style={styles.header}>
                         <div className="profileNameCnt" style={styles.profileNameCnt}>
@@ -142,6 +142,7 @@ export default function ViewCard({setCardScale, setPanelOpen, postId, viewCardCo
                             </div>
                         </div>
                     </div>
+
                     <div className="buttonCnt" style={{ display: 'flex', alignItems: 'center', width: '100%', padding: '.2rem', borderRadius: '1rem', background: '#f5f5f5', marginBottom: '1rem', justifyContent: 'space-between', }}>
                         <input style={{ width: '100%', padding: '1rem', fontSize: '20px', outline: 'none', background: 'none', border: 'none' }} placeholder="Leave A comment" />
                         <button style={{ background: 'rgb(10, 0, 17)', width: '100px', padding: '1rem', border: 'none', borderRadius: '1rem', color: '#fff' }}>Send</button>
