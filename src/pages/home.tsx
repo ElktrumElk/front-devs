@@ -25,10 +25,14 @@ interface home {
     setIsViewCard: React.Dispatch<SetStateAction<boolean>>,
     setViewCardId: React.Dispatch<SetStateAction<number>>,
     setViewComment: React.Dispatch<SetStateAction<boolean>>,
-    setCommentId: React.Dispatch<SetStateAction<string>>
+    setCommentId: React.Dispatch<SetStateAction<string>>,
+    setCardScale: React.Dispatch<SetStateAction<number>>,
+    setViewCardCoordinates: React.Dispatch<React.SetStateAction<{x: number, y: number}>>,
+    cardScale: number
+
 }
 
-export default function Home({ setIsViewCard, setViewCardId, setViewComment, setCommentId }: home) {
+export default function Home({ cardScale, setIsViewCard, setViewCardId, setViewComment, setCommentId, setViewCardCoordinates, setCardScale }: home) {
 
     /**Post By category */
     const [pbc, setpbc] = useState('All');
@@ -51,7 +55,7 @@ export default function Home({ setIsViewCard, setViewCardId, setViewComment, set
 
                 <section id="post-feeds" style={{ width: '100%' }}>
                     <div style={{ display: 'flex', width: '100%', flexDirection: 'column', gap: '1rem' }}>
-                        <PostCards postByCategory={pbc} expand={setIsViewCard} cardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId as unknown as React.Dispatch<SetStateAction<string>>} />
+                        <PostCards setCardScale={setCardScale} cardScale={cardScale} postByCategory={pbc} setViewCardCoordinates={setViewCardCoordinates} expand={setIsViewCard} cardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId as unknown as React.Dispatch<SetStateAction<string>>} />
                     </div>
                 </section>
             </div>

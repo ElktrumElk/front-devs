@@ -61,9 +61,11 @@ export default function MainPage() {
 
     const { isMobile, isTablet, isMiniDesktop } = styleResponsive();
     const isDesktop = !isMobile && !isTablet && !isMiniDesktop;
-    const {isViewCard, setIsViewCard, viewCardId, setViewCardId } = useViewCardContext();
+    const { isViewCard, setIsViewCard, viewCardId, setViewCardId } = useViewCardContext();
     const [isViewComment, setViewComment] = useState<boolean>(false);
     const [commentId, setCommentId] = useState<string>('');
+    const [viewCardCordinates, setViewCardCoordinates] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+    const [cardScale, setCardScale] = useState<number>(1);
 
     useEffect(() => {
         isViewCard ? document.body.classList.add('fixed') : document.body.classList.remove('fixed')
@@ -72,7 +74,7 @@ export default function MainPage() {
     return (
         <>
             <div className={isViewCard ? 'mainCnt' : ''} style={isDesktop ? subWrapperDesktop : isMiniDesktop ? subWrapperDesktopMini : subWrapperMobile}>
-                {isViewCard && <ViewCard setPanelOpen={setIsViewCard} postId={viewCardId} />}
+                {isViewCard && <ViewCard setCardScale={setCardScale} setPanelOpen={setIsViewCard} postId={viewCardId} viewCardCoordinate={viewCardCordinates} />}
                 {isViewComment && <ViewCommentPanel setPanelOpen={setViewComment} commentId={commentId} />}
 
                 {isDesktop && <DesktopSidebar />}
@@ -82,11 +84,11 @@ export default function MainPage() {
 
                 <div style={isTablet ? subWrapperTablet : subWrapperMobile} className='subWrapper'>
                     <Routes>
-                        <Route path='/home' element={<Home setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId} />} />
+                        <Route path='/home' element={<Home setCardScale={setCardScale} cardScale={cardScale} setViewCardCoordinates={setViewCardCoordinates} setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId} />} />
                         <Route path='/post' element={<AddPost />} />
-                        <Route path='/search' element={<Search setIsViewCard={setIsViewCard} setViewCardId={setViewCardId}/>} />
+                        <Route path='/search' element={<Search setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} />} />
                         <Route path='/user/profile' element={<UserProfile postId={setViewCardId} expandPost={setIsViewCard} />} />
-                        <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId} />} />
+                        <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home setCardScale={setCardScale} cardScale={cardScale} setViewCardCoordinates={setViewCardCoordinates} setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId} />} />
                     </Routes>
                 </div>
 

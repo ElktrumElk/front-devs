@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { postsData } from "../data/mockData"
 import { styleResponsive } from "../styles/responsivness";
 import RateCard from "../sub_components/rate_card";
@@ -16,26 +16,41 @@ interface pc {
     expand: React.Dispatch<React.SetStateAction<boolean>>,
     cardId: React.Dispatch<React.SetStateAction<number>>,
     setViewComment: React.Dispatch<React.SetStateAction<boolean>>,
-    setCommentId: React.Dispatch<React.SetStateAction<string>>
+    setCommentId: React.Dispatch<React.SetStateAction<string>>,
+    setViewCardCoordinates: React.Dispatch<React.SetStateAction<object>>,
+    cardScale: number,
+    setCardScale: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function PostCards({ postByCategory, expand, cardId, setViewComment, setCommentId }: pc) {
+export default function PostCards({ postByCategory, cardScale, setCardScale, expand, cardId, setViewComment, setCommentId, setViewCardCoordinates }: pc) {
 
     const postData = postByCategory === 'All' ? postsData : postsData.filter(post => post.category === postByCategory)
     const { isDesktop } = styleResponsive();
     const [israting, setDisplayRating] = useState(false);
     const [isRate, setRate] = useState(false);
     const [isPostId, setPostId] = useState<number>(0);
+    const [thisCard, setThiscard] = useState<number>(0)
 
     const handleRatingTogglePanel = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) { setDisplayRating(false) }
+        //const rect = e.currentTarget.getBoundingClientRect();
+        const posX = e.nativeEvent.clientX - e.nativeEvent.offsetX;
+        const posY = e.nativeEvent.clientY - e.nativeEvent.offsetY;
+        setViewCardCoordinates({ x: posX, y: posY });
     }
 
+    const handlePostScaleDown = () => {
+        setCardScale(cardScale === 1 ? 0 : 1);
+    }
+
+    useEffect(() => {
+        console.log(expand)
+    }, [expand])
     return (
         <>
             {
                 postData.map((dat, idx) => (
-                    <div onClick={(e) => handleRatingTogglePanel(e)} key={idx} style={{ width: '100%', borderRadius: '10px', background: 'white', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div onClick={(e) => { handleRatingTogglePanel(e); setThiscard(dat.id) }} key={idx} style={{ width: '100%', transform: `scale(${thisCard === dat.id ? cardScale : 1})`, transition: 'transform .1s ease', borderRadius: '10px', background: 'white', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
                         <div style={{ width: '100%', padding: '.4rem', display: 'flex', justifyContent: 'space-between' }}>
 
@@ -53,7 +68,7 @@ export default function PostCards({ postByCategory, expand, cardId, setViewComme
                             </div>
                         </div>
 
-                        <div onClick={() => { expand(true); cardId(dat.id) }} style={{ width: '100%', cursor: 'pointer', height: isDesktop ? '350px' : '250px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover' }}>
+                        <div onClick={() => { expand(true); handlePostScaleDown(); cardId(dat.id) }} style={{ width: '100%', cursor: 'pointer', height: isDesktop ? '350px' : '250px', overflow: 'hidden', background: 'black', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', objectFit: 'cover' }}>
                             <img src={dat.img} style={{ width: 'inherit', height: 'inherit', objectFit: 'cover' }} />
                         </div>
 

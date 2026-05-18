@@ -1,15 +1,22 @@
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import GetIntouchButton from "./get_in_touch_btn"
 import { getPostsByID } from "../data/get_post_data"
 import { styleResponsive } from "../styles/responsivness";
 import { ProgressBar } from "./progress_bar";
 
-interface viewcardProps {
-    setPanelOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    postId: number
+interface coord {
+    x: number,
+    y: number
 }
 
-export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
+interface viewcardProps {
+    setPanelOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    setCardScale: React.Dispatch<React.SetStateAction<number>>,
+    postId: number,
+    viewCardCoordinate: coord
+}
+
+export default function ViewCard({setCardScale, setPanelOpen, postId, viewCardCoordinate }: viewcardProps) {
 
     /**The background Element */
     const bk = useRef<HTMLDivElement>(null);
@@ -19,7 +26,12 @@ export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
     const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
         if (bk) {
             if (e.target === bk.current) {
-                setPanelOpen(false);
+                requestAnimationFrame(() => {
+                    setPop(pop === 0 ? 1 : 0);
+                })
+                setTimeout(() => {
+                    setPanelOpen(false);
+                }, 400)
             }
         }
         return;
@@ -33,18 +45,26 @@ export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
     /** Data that is render on the view card */
     const [cardData] = getPostsByID(postId);
     const ratingsCount = [8, 10, 3, 1, 6]
-    const tRatings  = 8 + 10 + 3 + 1 + 6;
+    const tRatings = 8 + 10 + 3 + 1 + 6;
     const displayRatings = tRatings / 5
     const handleRatings = (value: number) => {
         return value / Math.max(...ratingsCount) * 100;
-        
+
     }
+
+    const [pop, setPop] = useState<number>(0);
+    useEffect(() => {
+        const id = requestAnimationFrame(() => {
+            setPop(pop === 0 ? 1 : 0);
+        })
+        return () => cancelAnimationFrame(id);
+    }, [setPanelOpen]);
 
     return (
         <>
-            <div className="backgroundContainer" ref={bk} style={styles.backgroundContainer} onClick={(e) => handleClose(e)}>
-                <div className="viewCard viewCardMobile" style={styles.viewCard}>
-                    <button style={{ alignSelf: 'flex-end', background: '#282828', border: 'none', padding: '.4rem', borderRadius: '1rem', color: 'white'}} onClick={handleCloseMobile}>Close</button>
+            <div className="backgroundContainer" ref={bk} style={styles.backgroundContainer} onClick={(e) => {handleClose(e); setCardScale(1)}}>
+                <div className="viewCard viewCardMobile" style={{ ...styles.viewCard, transform: `scale(${pop})`, transition: 'transform .2s ease', transformOrigin: `${viewCardCoordinate.x}px ${viewCardCoordinate.y}px` }}>
+                    <button style={{ alignSelf: 'flex-end', background: '#282828', border: 'none', padding: '.4rem', borderRadius: '1rem', color: 'white' }} onClick={handleCloseMobile}>Close</button>
                     <header style={styles.header}>
                         <div className="profileNameCnt" style={styles.profileNameCnt}>
                             <div style={styles.profileImageCnt}>
@@ -84,7 +104,7 @@ export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
                         </div>
                     </article>
 
-                    <div className="ratingCnt" style={{display: 'flex', flexDirection: 'column', width: '100%', marginBlockStart: '3rem', marginBlockEnd: '3rem'}}>
+                    <div className="ratingCnt" style={{ display: 'flex', flexDirection: 'column', width: '100%', marginBlockStart: '3rem', marginBlockEnd: '3rem' }}>
                         <h5>Ratings</h5>
                         <div style={{ width: '90%', display: 'flex', gap: '.5rem', background: '#f5f5f5', alignItems: 'center', padding: '.5rem' }}>
                             <div style={{ width: '10rem', height: '10rem', borderRadius: '1rem', background: '#dedbdb', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -95,27 +115,27 @@ export default function ViewCard({ setPanelOpen, postId }: viewcardProps) {
 
                                     <li style={styles.ulList}>
                                         <span>5</span>
-                                        <ProgressBar value={handleRatings(8)}/>
+                                        <ProgressBar value={handleRatings(8)} />
                                         <span>8</span>
                                     </li>
                                     <li style={styles.ulList}>
                                         <span>4</span>
-                                        <ProgressBar value={handleRatings(10)}/>
+                                        <ProgressBar value={handleRatings(10)} />
                                         <span>10</span>
                                     </li>
                                     <li style={styles.ulList}>
                                         <span>3</span>
-                                        <ProgressBar value={handleRatings(3)}/>
+                                        <ProgressBar value={handleRatings(3)} />
                                         <span>3</span>
                                     </li>
                                     <li style={styles.ulList}>
                                         <span>2</span>
-                                        <ProgressBar value={handleRatings(1)}/>
+                                        <ProgressBar value={handleRatings(1)} />
                                         <span>1</span>
                                     </li>
                                     <li style={styles.ulList}>
                                         <span>1</span>
-                                        <ProgressBar value={handleRatings(6)}/>
+                                        <ProgressBar value={handleRatings(6)} />
                                         <span>6</span>
                                     </li>
                                 </ul>
