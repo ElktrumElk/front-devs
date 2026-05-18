@@ -14,7 +14,7 @@ interface Post {
 
 interface SearchProps {
     setIsViewCard: Dispatch<SetStateAction<boolean>>;
-    setViewCardId: Dispatch<SetStateAction<number | null>>;
+    setViewCardId: Dispatch<SetStateAction<number>>;
 }
 
 export default function Search({ setIsViewCard, setViewCardId }: SearchProps) {

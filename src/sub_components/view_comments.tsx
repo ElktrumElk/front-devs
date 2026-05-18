@@ -8,39 +8,50 @@ interface viewcomment {
     commentId: string
 }
 
+// Define explicit types for your comment items
+interface CommentItem {
+    id: number;
+    userCommentName: string;
+    comment: string;
+    time: string;
+}
+
 export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcomment) {
-    const a = [{
-        id: 0,
-        userCommentName: '',
-        comment: '',
-        time: ''
-    }];
+    const { comments, setComments } = UserComment() as { 
+        comments: Record<string, CommentItem[]>; 
+        setComments: (c: Record<string, CommentItem[]>) => void 
+    };
 
-    const { comments, setComments } = UserComment();
-    const [filterComment, setFilterCmt] = useState<typeof a>(comments[commentId] ? comments[commentId] : []);
-    const [commentImage] = postsData.filter(prev => prev.postId === commentId)
-
+    // FIX 1 & 2: Added explicit structural types and fallback array initialization safely
+    const initialComments: CommentItem[] = comments[commentId] ? comments[commentId] : [];
+    const [filterComment, setFilterCmt] = useState<CommentItem[]>(initialComments);
+    
+    const [commentImage] = postsData.filter(prev => prev.postId === commentId);
     const commentInput = useRef<HTMLInputElement>(null);
 
     const handleComments = () => {
-        if (commentInput) {
-            const value = commentInput.current?.value;
+        // FIX 3: Strict value check prevents undefined strings from breaking states
+        const value = commentInput.current?.value;
+        if (!value) return; 
 
-            const data = {
-                id: filterComment.length + 1,
-                userCommentName: 'ElktrumElk',
-                comment: value,
-                time: 'just now'
-            }
+        const newComment: CommentItem = {
+            id: filterComment.length + 1,
+            userCommentName: 'ElktrumElk',
+            comment: value,
+            time: 'just now'
+        };
 
-            setFilterCmt(prev => [data, ...prev]);
-            comments[commentId].push(filterComment)
-            setComments(comments);
-            console.log(filterComment, comments)
-            commentInput.current.value = '';
-        }
+        // FIX 4: Immutably update both states simultaneously without array mutations
+        const updatedTargetComments = [newComment, ...filterComment];
+        
+        setFilterCmt(updatedTargetComments);
+        setComments({
+            ...comments,
+            [commentId]: updatedTargetComments
+        });
 
-    }
+        commentInput.current.value = '';
+    };
 
     return (
         <>
@@ -54,7 +65,7 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
                         </header>
 
                         <div style={styles.figureImageCnt}>
-                            <img style={styles.previewImage} src={commentImage.img} />
+                            {commentImage && <img style={styles.previewImage} src={commentImage.img} alt="post preview" />}
                         </div>
 
                         <section style={{ display: 'flex', width: '100%', flexDirection: 'column', gap: '.5rem' }}>
@@ -101,9 +112,7 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
     )
 }
 
-
 const styles: { [key: string]: React.CSSProperties } = {
-
     backgroundContainer: {
         background: '#11101049',
         inset: 0,
@@ -112,10 +121,9 @@ const styles: { [key: string]: React.CSSProperties } = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: '2000',
+        zIndex: 2000,
         overflow: 'hidden',
         padding: '3rem',
-
     },
     viewCommentCnt: {
         width: '50rem',
@@ -128,7 +136,6 @@ const styles: { [key: string]: React.CSSProperties } = {
         flexDirection: 'column',
         alignItems: 'center',
         flex: '0 0 auto',
-
     },
     article: {
         width: '100%',
@@ -138,7 +145,6 @@ const styles: { [key: string]: React.CSSProperties } = {
         background: '#f5f5f5',
         padding: '1rem',
         borderRadius: '1rem',
-
     },
     profileImage: {
         display: 'flex',
@@ -153,22 +159,14 @@ const styles: { [key: string]: React.CSSProperties } = {
         color: 'white'
     },
     figureImageCnt: {
-        width: '60%',
-        height: '300px',
-        background: '#000',
+        width: '100%',
+        maxHeight: '200px',
         overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '1rem',
-        alignSelf: 'center',
-        flex: '0 0 auto'
+        borderRadius: '1rem'
     },
-
     previewImage: {
         width: '100%',
-        objectFit: 'cover',
-        objectPosition: 'center'
-    },
-}
+        height: '100%',
+        objectFit: 'cover'
+    }
+};
