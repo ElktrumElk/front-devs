@@ -63,7 +63,7 @@ export default function MainPage() {
     const isDesktop = !isMobile && !isTablet && !isMiniDesktop;
     const {isViewCard, setIsViewCard, viewCardId, setViewCardId } = useViewCardContext();
     const [isViewComment, setViewComment] = useState<boolean>(false);
-    const [commentId, setCommentId] = useState<number | null>(null);
+    const [commentId, setCommentId] = useState<string>(null);
 
     useEffect(() => {
         isViewCard ? document.body.classList.add('fixed') : document.body.classList.remove('fixed')

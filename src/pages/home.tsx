@@ -25,7 +25,7 @@ interface home {
     setIsViewCard: React.Dispatch<SetStateAction<boolean>>,
     setViewCardId: React.Dispatch<SetStateAction<number>>,
     setViewComment: React.Dispatch<SetStateAction<boolean>>,
-    setCommentId: React.Dispatch<SetStateAction<number>>
+    setCommentId: React.Dispatch<SetStateAction<string>>
 }
 
 export default function Home({ setIsViewCard, setViewCardId, setViewComment, setCommentId }: home) {

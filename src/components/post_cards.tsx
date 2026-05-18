@@ -25,7 +25,7 @@ export default function PostCards({ postByCategory, expand, cardId, setViewComme
     const { isDesktop } = styleResponsive();
     const [israting, setDisplayRating] = useState(false);
     const [isRate, setRate] = useState(false);
-    const [isPostId, setPostId] = useState<number>(null);
+    const [isPostId, setPostId] = useState<number>(0);
 
     const handleRatingTogglePanel = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) { setDisplayRating(false) }
@@ -67,14 +67,14 @@ export default function PostCards({ postByCategory, expand, cardId, setViewComme
                             <p style={{ color: '#5c5c5c' }}>{dat.description}</p>
                         </article>
 
-                        {israting && isPostId === dat.id && <RateCard isRate={isRate}/>}
+                        {israting && isPostId === dat.id && <RateCard isRate={isRate} />}
 
                         <div style={{ width: '100%', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                            <div style={likesharecnt} onClick={() => { setDisplayRating(true); setPostId(dat.id) }}>
+                            <div style={likesharecnt} onClick={() => { setDisplayRating(true); setPostId(dat.id as typeof isPostId) }}>
                                 <img onClick={() => setRate(!isRate)} src={`https://img.icons8.com/?size=100&id=104&format=png&color=${isRate ? 'dfbf06' : '7a7a7a'}`} width="20px" height="20px" alt="ratings" />
                                 <span>{dat.ratings}</span>
                             </div>
-                            <div style={likesharecnt} onClick={() => { setViewComment(true); setCommentId(dat.postId)}}>
+                            <div style={likesharecnt} onClick={() => { setViewComment(true); setCommentId(dat.postId) }}>
                                 <img src="https://img.icons8.com/?size=100&id=143&format=png&color=000000" width="20px" height="20px" alt="comment" />
                                 <span>{dat.comment}</span>
                             </div>
