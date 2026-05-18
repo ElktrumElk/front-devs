@@ -8,7 +8,6 @@ interface viewcomment {
     commentId: string
 }
 
-// Define explicit types for your comment items
 interface CommentItem {
     id: number;
     userCommentName: string;
@@ -17,12 +16,12 @@ interface CommentItem {
 }
 
 export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcomment) {
-    const { comments, setComments } = UserComment() as { 
+    // FIX 1: Convert to 'unknown' first to cleanly map your hook's rigid return shape
+    const { comments, setComments } = UserComment() as unknown as { 
         comments: Record<string, CommentItem[]>; 
-        setComments: (c: Record<string, CommentItem[]>) => void 
+        setComments: React.Dispatch<React.SetStateAction<Record<string, CommentItem[]>>>
     };
 
-    // FIX 1 & 2: Added explicit structural types and fallback array initialization safely
     const initialComments: CommentItem[] = comments[commentId] ? comments[commentId] : [];
     const [filterComment, setFilterCmt] = useState<CommentItem[]>(initialComments);
     
@@ -30,7 +29,6 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
     const commentInput = useRef<HTMLInputElement>(null);
 
     const handleComments = () => {
-        // FIX 3: Strict value check prevents undefined strings from breaking states
         const value = commentInput.current?.value;
         if (!value) return; 
 
@@ -41,7 +39,6 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
             time: 'just now'
         };
 
-        // FIX 4: Immutably update both states simultaneously without array mutations
         const updatedTargetComments = [newComment, ...filterComment];
         
         setFilterCmt(updatedTargetComments);
@@ -50,7 +47,10 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
             [commentId]: updatedTargetComments
         });
 
-        commentInput.current.value = '';
+        // FIX 2: Added optional chaining verification before reassignment to protect against null values
+        if (commentInput.current) {
+            commentInput.current.value = '';
+        }
     };
 
     return (
