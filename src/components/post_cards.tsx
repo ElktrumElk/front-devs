@@ -17,7 +17,7 @@ interface pc {
     cardId: React.Dispatch<React.SetStateAction<number>>,
     setViewComment: React.Dispatch<React.SetStateAction<boolean>>,
     setCommentId: React.Dispatch<React.SetStateAction<string>>,
-    setViewCardCoordinates: React.Dispatch<React.SetStateAction<object>>,
+    setViewCardCoordinates: React.Dispatch<React.SetStateAction<{x: number, y: number}>>,
     cardScale: number,
     setCardScale: React.Dispatch<React.SetStateAction<number>>
 }
