@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Home from './home';
 import MobileFooter from '../components/mobileFooter';
 import Header from '../components/header';
@@ -8,7 +8,7 @@ import { styleResponsive } from '../styles/responsivness';
 import DesktopSidebar from '../components/desktop_side_bar';
 import UserProfile from './userProfile';
 import NotificationPanel from './notifaction';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ViewCard from '../sub_components/view_card';
 import ViewCommentPanel from '../sub_components/view_comments';
 import useViewCardContext from '../context/view_card_context';
@@ -18,8 +18,9 @@ import useViewCardContext from '../context/view_card_context';
 
 const subWrapperDesktop: React.CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: '.5fr 1.5fr 1fr 400px',
+    gridTemplateColumns: '200px 1.5fr 1fr 400px',
     width: "100%",
+    maxWidth: '2500px',
     height: "100%",
     gap: '1rem'
 
@@ -66,11 +67,9 @@ export default function MainPage() {
     const [commentId, setCommentId] = useState<string>('');
     const [viewCardCordinates, setViewCardCoordinates] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const [cardScale, setCardScale] = useState<number>(1);
-
-    useEffect(() => {
-        isViewCard ? document.body.classList.add('fixed') : document.body.classList.remove('fixed');
-        console.log(isViewCard)
-    }, [viewCardId, isViewCard, isViewComment])
+    const location = useLocation();
+    const hiddenHeaderRoutes = ['/app/post', '/app/user/profile', '/app/user/notification'];
+    const showHeader = !hiddenHeaderRoutes.includes(location.pathname);
 
     return (
         <>
@@ -80,7 +79,7 @@ export default function MainPage() {
 
                 {isDesktop && <DesktopSidebar />}
                 {isMiniDesktop && <DesktopSidebar />}
-                {!isDesktop && !isMiniDesktop && <Header />}
+                {!isDesktop && !isMiniDesktop && showHeader && <Header />}
 
 
                 <div style={isTablet ? subWrapperTablet : subWrapperMobile} className='subWrapper'>
@@ -89,6 +88,7 @@ export default function MainPage() {
                         <Route path='/post' element={<AddPost />} />
                         <Route path='/search' element={<Search setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} />} />
                         <Route path='/user/profile' element={<UserProfile postId={setViewCardId} expandPost={setIsViewCard} />} />
+                        <Route path='/user/:username' element={<UserProfile postId={setViewCardId} expandPost={setIsViewCard} isPublicView={true} />} />
                         <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home setCardScale={setCardScale} cardScale={cardScale} setViewCardCoordinates={setViewCardCoordinates} setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId} />} />
                     </Routes>
                 </div>

@@ -7,6 +7,8 @@ import UserMenuList from "../sub_components/user_profile_menu_list";
 import { styleResponsive } from "../styles/responsivness";
 import { fetchData } from "../data/fetch_data";
 import GetIntouchButton from "../sub_components/get_in_touch_btn";
+import { useParams } from "react-router-dom";
+import GetInTouchPanel from "../sub_components/get_intouch_panel";
 
 // --- INLINE STYLES ---
 const pageWrapper: React.CSSProperties = {
@@ -27,7 +29,7 @@ const pageWrapper: React.CSSProperties = {
 
 // --- INLINE STYLES ---
 const pageWrapperMobile: React.CSSProperties = {
-    width: '95%',
+    width: '100%',
     height: '100%',
     margin: "0 auto",
     padding: "2.5rem 1rem",
@@ -105,37 +107,68 @@ interface dat {
 
 interface userprofile {
     expandPost: React.Dispatch<SetStateAction<boolean>>,
-    postId: React.Dispatch<SetStateAction<number>>
+    postId: React.Dispatch<SetStateAction<number>>,
+    isPublicView?: boolean
 }
 
-export default function UserProfileMenu({ expandPost, postId }: userprofile) {
+export default function UserProfileMenu({ expandPost, postId, isPublicView = false }: userprofile) {
+    const { username } = useParams<{ username: string }>();
 
     const posts = postsData;
-    const userTag = localStorage.getItem('data');
+    let userTag = localStorage.getItem('data');
 
-    const userPost = posts.filter(x => x.usertag === JSON.parse(userTag as string)?.usertag);
+    const currentUserData = userTag ? JSON.parse(userTag)?.usertag : null;
+
+    const userPost = isPublicView
+        ? posts.filter(x => x.username === username)
+        : posts.filter(x => x.usertag === currentUserData);
+
     const { subPostCards } = StyleUtilities();
     const [userMenu, showMenu] = useState(false);
     const { isMobile } = styleResponsive();
     const [userData, setUserData] = useState<dat | null>(null);
 
     useEffect(() => {
-
         const f = async () => {
-            const data = await fetchData();
-            const dat = (data as dat)
-            setUserData(dat)
+            if (isPublicView && username) {
+                // For public profile, get data from post data based on username
+                const userPost = posts.find(x => x.username === username);
+                if (userPost) {
+                    setUserData({
+                        id: userPost.id,
+                        username: userPost.username,
+                        email: 'user@example.com',
+                        fullname: userPost.username,
+                        avatarUrl: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                        bio: 'User bio',
+                        ratings: userPost.ratings,
+                        followers: 12000
+                    });
+                }
+            } else {
+                // For private profile, get current user data
+                const data = await fetchData();
+                const dat = (data as dat)
+                setUserData(dat)
+            }
         }
         f();
-    }, []);
+    }, [isPublicView, username]);
+
+    const isOwnProfile = !isPublicView || (userTag && JSON.parse(userTag)?.username === username);
+    const showMenu_Button = !isPublicView;
+    const [showGetIntouchPanel, setGetIntouchPane] = useState<boolean>(false);
+
 
     return (
 
         <div style={isMobile ? pageWrapperMobile : pageWrapper}>
 
-            <button onClick={() => showMenu(!userMenu)} style={{ alignSelf: 'flex-end', background: 'none', padding: '.5rem', border: 'none' }}>
-                <img src="https://img.icons8.com/?size=100&id=20763&format=png&color=7a7a7a" width={"20"} height={"20"} />
-            </button>
+            {showMenu_Button && (
+                <button onClick={() => showMenu(!userMenu)} style={{ alignSelf: 'flex-end', background: 'none', padding: '.5rem', border: 'none' }}>
+                    <img src="https://img.icons8.com/?size=100&id=20763&format=png&color=7a7a7a" width={"20"} height={"20"} />
+                </button>
+            )}
             {
                 userMenu &&
                 <div onClick={() => showMenu(false)} style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0', zIndex: '100', background: '#1e1f1f1d' }}>
@@ -152,9 +185,14 @@ export default function UserProfileMenu({ expandPost, postId }: userprofile) {
                 <h2 style={nameStyle}>{userData ? userData.username : '...'}</h2>
                 <p style={emailStyle}>{userData ? userData.email : '...'}</p>
 
-                <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
-                    <GetIntouchButton isResponsive={false} />
-                </div>
+                {!isOwnProfile && (
+                    <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
+                        <GetIntouchButton isResponsive={false} showPanel={setGetIntouchPane} panelState={showGetIntouchPanel} />
+                        {showGetIntouchPanel && <GetInTouchPanel />}
+
+                    </div>
+
+                )}
             </div>
 
 

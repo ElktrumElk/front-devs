@@ -43,7 +43,6 @@ export default function Search({ setIsViewCard, setViewCardId }: SearchProps) {
     return (
         <div style={subPostCards.container}>
             <div style={subPostCards.header}>
-                <h1>Search</h1>
                 <div style={subPostCards.searchBar}>
                     <img src="https://img.icons8.com/?size=100&id=XU3XKgdpT0qG&format=png&color=7a7a7a" width="24px" height="24px" alt="search" />
                     <input

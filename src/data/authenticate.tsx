@@ -1,13 +1,11 @@
 const isLogin = new Promise<boolean | string | null>((resolve) => {
 
     const data = localStorage.getItem('isLogin');
-    console.log(data)
+
     if (data === null) {
         resolve(null);
     }
     else if (data) {
-        console.log(data)
-
         resolve(true)
     }
     else {
