@@ -8,6 +8,7 @@ import { styleResponsive } from "../styles/responsivness";
 import { fetchData } from "../data/fetch_data";
 import GetIntouchButton from "../sub_components/get_in_touch_btn";
 import { useParams } from "react-router-dom";
+import GetInTouchPanel from "../sub_components/get_intouch_panel";
 
 // --- INLINE STYLES ---
 const pageWrapper: React.CSSProperties = {
@@ -115,13 +116,13 @@ export default function UserProfileMenu({ expandPost, postId, isPublicView = fal
 
     const posts = postsData;
     let userTag = localStorage.getItem('data');
-    
+
     const currentUserData = userTag ? JSON.parse(userTag)?.usertag : null;
 
-    const userPost = isPublicView 
+    const userPost = isPublicView
         ? posts.filter(x => x.username === username)
         : posts.filter(x => x.usertag === currentUserData);
-    
+
     const { subPostCards } = StyleUtilities();
     const [userMenu, showMenu] = useState(false);
     const { isMobile } = styleResponsive();
@@ -156,6 +157,8 @@ export default function UserProfileMenu({ expandPost, postId, isPublicView = fal
 
     const isOwnProfile = !isPublicView || (userTag && JSON.parse(userTag)?.username === username);
     const showMenu_Button = !isPublicView;
+    const [showGetIntouchPanel, setGetIntouchPane] = useState<boolean>(false);
+
 
     return (
 
@@ -184,8 +187,11 @@ export default function UserProfileMenu({ expandPost, postId, isPublicView = fal
 
                 {!isOwnProfile && (
                     <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
-                        <GetIntouchButton isResponsive={false} />
+                        <GetIntouchButton isResponsive={false} showPanel={setGetIntouchPane} panelState={showGetIntouchPanel} />
+                        {showGetIntouchPanel && <GetInTouchPanel />}
+
                     </div>
+
                 )}
             </div>
 
