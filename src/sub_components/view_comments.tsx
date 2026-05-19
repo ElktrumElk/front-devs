@@ -1,4 +1,4 @@
-import { useRef, type SetStateAction } from "react"
+import { useRef, type SetStateAction, useEffect } from "react"
 import { UserComment } from "../data/comments";
 import { postsData } from "../data/mockData";
 import { useState } from "react";
@@ -17,20 +17,28 @@ interface CommentItem {
 
 export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcomment) {
     // FIX 1: Convert to 'unknown' first to cleanly map your hook's rigid return shape
-    const { comments, setComments } = UserComment() as unknown as { 
-        comments: Record<string, CommentItem[]>; 
+    const { comments, setComments } = UserComment() as unknown as {
+        comments: Record<string, CommentItem[]>;
         setComments: React.Dispatch<React.SetStateAction<Record<string, CommentItem[]>>>
     };
 
     const initialComments: CommentItem[] = comments[commentId] ? comments[commentId] : [];
     const [filterComment, setFilterCmt] = useState<CommentItem[]>(initialComments);
-    
+
     const [commentImage] = postsData.filter(prev => prev.postId === commentId);
     const commentInput = useRef<HTMLInputElement>(null);
 
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+        document.body.classList.add('modal-open');
+        return () => {
+            document.body.classList.remove('modal-open');
+        };
+    }, []);
+
     const handleComments = () => {
         const value = commentInput.current?.value;
-        if (!value) return; 
+        if (!value) return;
 
         const newComment: CommentItem = {
             id: filterComment.length + 1,
@@ -40,7 +48,7 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
         };
 
         const updatedTargetComments = [newComment, ...filterComment];
-        
+
         setFilterCmt(updatedTargetComments);
         setComments({
             ...comments,
@@ -57,13 +65,14 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
         <>
             <div style={styles.backgroundContainer} className="backgroundContainer">
                 <div style={styles.viewCommentCnt} className="viewCard">
-                    <button style={{ alignSelf: 'flex-end', background: '#282828', border: 'none', padding: '.4rem', borderRadius: '1rem', color: 'white' }} onClick={() => setPanelOpen(false)}>Close</button>
-                    <section style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', overflowY: 'auto' }}>
 
                         <header style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
                             <h1>Comments</h1>
+                            <button style={{ marginInlineStart: 'auto', cursor: 'pointer', background: 'none', border: 'none', padding: '.4rem', borderRadius: '1rem', color: 'white' }} onClick={() => setPanelOpen(false)}>
+                                <img src="https://img.icons8.com/?size=100&id=8112&format=png&color=7a7a7a" width={'20'} height={'20'} />
+                            </button>
                         </header>
-
+                    <section style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', overflowY: 'auto' }}>
                         <div style={styles.figureImageCnt}>
                             {commentImage && <img style={styles.previewImage} src={commentImage.img} alt="post preview" />}
                         </div>
@@ -120,14 +129,16 @@ const styles: { [key: string]: React.CSSProperties } = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         zIndex: 2000,
         overflow: 'hidden',
         padding: '3rem',
+        
     },
     viewCommentCnt: {
         width: '50rem',
-        height: '100%',
+        height: 'auto',
+        maxHeight: '100dvh',
         padding: '1rem',
         background: '#fff',
         borderRadius: '1rem',
@@ -136,6 +147,8 @@ const styles: { [key: string]: React.CSSProperties } = {
         flexDirection: 'column',
         alignItems: 'center',
         flex: '0 0 auto',
+        flexShrink: '0',
+        overflow: 'hidden',
     },
     article: {
         width: '100%',
@@ -162,7 +175,8 @@ const styles: { [key: string]: React.CSSProperties } = {
         width: '100%',
         maxHeight: '200px',
         overflow: 'hidden',
-        borderRadius: '1rem'
+        borderRadius: '1rem',
+        flex: '0 0 auto'
     },
     previewImage: {
         width: '100%',

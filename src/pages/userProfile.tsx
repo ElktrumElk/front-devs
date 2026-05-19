@@ -27,7 +27,7 @@ const pageWrapper: React.CSSProperties = {
 
 // --- INLINE STYLES ---
 const pageWrapperMobile: React.CSSProperties = {
-    width: '95%',
+    width: '100%',
     height: '100%',
     margin: "0 auto",
     padding: "2.5rem 1rem",

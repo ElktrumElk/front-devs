@@ -19,7 +19,7 @@ const panelWrapper: React.CSSProperties = {
 };
 
 const panelWrapperMobile: React.CSSProperties = {
-    width: "90%",
+    width: "100%",
     height: "500px",
     background: "#ffffff",
     borderRadius: "16px",
@@ -126,6 +126,12 @@ const emptyState: React.CSSProperties = {
     gap: "0.5rem"
 };
 
+const filterButton: React.CSSProperties = {
+    padding: '.4rem 1rem',
+    border: '1px solid black',
+    borderRadius: '1rem',
+    background: 'none'
+}
 // --- TYPES ---
 interface Notification {
     id: string;
@@ -174,7 +180,10 @@ export default function NotificationPanel() {
                     </button>
                 )}
             </div>
-
+            <div style={{display: 'flex', gap: '1rem', width: '100%', alignItems: 'center', paddingInlineStart: '1rem'}}>
+                <button style={filterButton}>All</button>
+                <button style={filterButton}>Unread</button>
+            </div>
             {/* Main Notifications Scroll Window */}
             <div style={listContainer}>
                 {notifications.length === 0 ? (

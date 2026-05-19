@@ -17,7 +17,7 @@ interface pc {
     cardId: React.Dispatch<React.SetStateAction<number>>,
     setViewComment: React.Dispatch<React.SetStateAction<boolean>>,
     setCommentId: React.Dispatch<React.SetStateAction<string>>,
-    setViewCardCoordinates: React.Dispatch<React.SetStateAction<{x: number, y: number}>>,
+    setViewCardCoordinates: React.Dispatch<React.SetStateAction<{ x: number, y: number }>>,
     cardScale: number,
     setCardScale: React.Dispatch<React.SetStateAction<number>>
 }
@@ -27,9 +27,10 @@ export default function PostCards({ postByCategory, cardScale, setCardScale, exp
     const postData = postByCategory === 'All' ? postsData : postsData.filter(post => post.category === postByCategory)
     const { isDesktop } = styleResponsive();
     const [israting, setDisplayRating] = useState(false);
-    const [isRate, setRate] = useState(false);
+    const [isRate, setRate] = useState<{ [key: number]: boolean }>({});
     const [isPostId, setPostId] = useState<number>(0);
     const [thisCard, setThiscard] = useState<number>(0)
+    const [longPressTimer, setLongPressTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
 
     const handleRatingTogglePanel = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) { setDisplayRating(false) }
@@ -43,8 +44,38 @@ export default function PostCards({ postByCategory, cardScale, setCardScale, exp
         setCardScale(cardScale === 1 ? 0 : 1);
     }
 
+    // Simple click rating toggle
+    const handleQuickRate = (e: React.MouseEvent, postId: number) => {
+        e.stopPropagation();
+        setRate(prev => ({
+            ...prev,
+            [postId]: !prev[postId]
+        }));
+    };
+
+    // Long press for rating panel
+    const handleRatingMouseDown = (e: React.MouseEvent, postId: number) => {
+        e.stopPropagation();
+        const timer = setTimeout(() => {
+            setDisplayRating(true);
+            setPostId(postId);
+        }, 500); // 500ms long press
+        setLongPressTimer(timer);
+    };
+
+    const handleRatingMouseUp = () => {
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            setLongPressTimer(null);
+        }
+    };
+
+    const closeRatingPanel = () => {
+        setDisplayRating(false);
+        setPostId(0);
+    };
+
     useEffect(() => {
-        console.log(expand)
     }, [expand])
     return (
         <>
@@ -82,11 +113,23 @@ export default function PostCards({ postByCategory, cardScale, setCardScale, exp
                             <p style={{ color: '#5c5c5c' }}>{dat.description}</p>
                         </article>
 
-                        {israting && isPostId === dat.id && <RateCard isRate={isRate} />}
+                        {israting && isPostId === dat.id && <RateCard closePanel={closeRatingPanel} />}
 
                         <div style={{ width: '100%', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                            <div style={likesharecnt} onClick={() => { setDisplayRating(true); setPostId(dat.id as typeof isPostId) }}>
-                                <img onClick={() => setRate(!isRate)} src={`https://img.icons8.com/?size=100&id=104&format=png&color=${isRate ? 'dfbf06' : '7a7a7a'}`} width="20px" height="20px" alt="ratings" />
+                            <div style={likesharecnt}>
+                                <img 
+                                    onMouseDown={(e) => handleRatingMouseDown(e, dat.id)}
+                                    onMouseUp={handleRatingMouseUp}
+                                    onMouseLeave={handleRatingMouseUp}
+                                    onTouchStart={(e) => handleRatingMouseDown(e as any, dat.id)}
+                                    onTouchEnd={handleRatingMouseUp}
+                                    onClick={(e) => handleQuickRate(e, dat.id)} 
+                                    src={`https://img.icons8.com/?size=100&id=104&format=png&color=${isRate[dat.id] ? 'dfbf06' : '7a7a7a'}`} 
+                                    width="20px" 
+                                    height="20px" 
+                                    alt="ratings" 
+                                    style={{ cursor: 'pointer' }}
+                                />
                                 <span>{dat.ratings}</span>
                             </div>
                             <div style={likesharecnt} onClick={() => { setViewComment(true); setCommentId(dat.postId) }}>
