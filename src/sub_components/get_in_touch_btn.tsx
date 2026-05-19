@@ -1,8 +1,8 @@
 
 interface getIntouch {
     isResponsive: boolean,
-    panelState?: boolean,
-    showPanel?: React.Dispatch<React.SetStateAction<boolean>>
+    panelState: boolean,
+    showPanel: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function GetIntouchButton({ isResponsive, showPanel, panelState }: getIntouch) {
