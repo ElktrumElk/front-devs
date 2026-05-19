@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { postsData } from "../data/mockData"
 import { styleResponsive } from "../styles/responsivness";
 import RateCard from "../sub_components/rate_card";
@@ -23,7 +24,7 @@ interface pc {
 }
 
 export default function PostCards({ postByCategory, cardScale, setCardScale, expand, cardId, setViewComment, setCommentId, setViewCardCoordinates }: pc) {
-
+    const navigate = useNavigate();
     const postData = postByCategory === 'All' ? postsData : postsData.filter(post => post.category === postByCategory)
     const { isDesktop } = styleResponsive();
     const [israting, setDisplayRating] = useState(false);
@@ -85,7 +86,7 @@ export default function PostCards({ postByCategory, cardScale, setCardScale, exp
 
                         <div style={{ width: '100%', padding: '.4rem', display: 'flex', justifyContent: 'space-between' }}>
 
-                            <div style={{ display: 'flex', gap: '.3rem' }}>
+                            <div style={{ display: 'flex', gap: '.3rem', cursor: 'pointer' }} onClick={() => navigate(`/app/user/${dat.username}`)}>
                                 <div style={{ background: '#03344b', width: '40px', height: '40px', color: 'white', padding: '20px', borderRadius: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                     <span>{dat.username.substring(0, 1)}</span>
                                 </div>

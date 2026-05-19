@@ -88,6 +88,7 @@ export default function MainPage() {
                         <Route path='/post' element={<AddPost />} />
                         <Route path='/search' element={<Search setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} />} />
                         <Route path='/user/profile' element={<UserProfile postId={setViewCardId} expandPost={setIsViewCard} />} />
+                        <Route path='/user/:username' element={<UserProfile postId={setViewCardId} expandPost={setIsViewCard} isPublicView={true} />} />
                         <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home setCardScale={setCardScale} cardScale={cardScale} setViewCardCoordinates={setViewCardCoordinates} setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId} />} />
                     </Routes>
                 </div>

@@ -1,6 +1,7 @@
 import { ProgressBar } from "./progress_bar";
 import GetIntouchButton from "./get_in_touch_btn"
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getPostsByID } from "../data/get_post_data";
 import { styleResponsive } from "../styles/responsivness";
 import GetInTouchPanel from "./get_intouch_panel";
@@ -21,7 +22,7 @@ interface viewcardProps {
 }
 
 export default function ViewCardCnt({ setPanelOpen, postId, viewCardCoordinate, setPop, pop }: viewcardProps) {
-
+    const navigate = useNavigate();
     const { isMobile } = styleResponsive() // mobile users
 
     /** Data that is render on the view card */
@@ -52,7 +53,7 @@ export default function ViewCardCnt({ setPanelOpen, postId, viewCardCoordinate, 
         <>
             <div className="viewCard viewCardMobile" style={{ ...styles.viewCard, transform: `scale(${pop})`, transition: 'transform .2s ease', transformOrigin: isMobile ? `center ${viewCardCoordinate.y}` : `${viewCardCoordinate.x}px ${viewCardCoordinate.y}px` }}>
                 <header style={styles.header}>
-                    <div className="profileNameCnt" style={styles.profileNameCnt}>
+                    <div className="profileNameCnt" onClick={() => navigate(`/app/user/${cardData.username}`)} style={{ ...styles.profileNameCnt, cursor: 'pointer' }}>
                         <div style={styles.profileImageCnt}>
                             <img />
                         </div>
