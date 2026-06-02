@@ -1,0 +1,6 @@
+{
+  "name": "Devs",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone"
+}
