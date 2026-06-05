@@ -1,6 +1,6 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { userAccount } from "../data/accountDB"
+import { login } from "../api/auth"
 import { styleResponsive } from "../styles/responsivness"
 
 const logHeader: React.CSSProperties = {
@@ -50,36 +50,32 @@ export default function Login() {
     const userEmailInput = useRef<HTMLInputElement>(null);
     const userPasswordInput = useRef<HTMLInputElement>(null);
     const { isMobile } = styleResponsive();
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const { Database } = userAccount();
-
-    const handleLogin = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setError('');
 
         const email = userEmailInput.current?.value;
         const password = userPasswordInput.current?.value;
 
         if (email && password) {
-
-            const user = (Database)[email];
-
-            if (user) {
-                if (user.password === password) {
-                    localStorage.setItem('email', user.email);
-                    localStorage.setItem('isLogin', 'true');
-
-                    navigate('/verifyemail', {replace: true});
-                    
-                } else {
-                    alert('invalid Login 2');
-                }
-            } else {
-                alert("Invalid Login 1");
+            setLoading(true);
+            try {
+                const { data } = await login({ email, password });
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('data', JSON.stringify(data.user));
+                localStorage.setItem('_tempPassword', password);
+                navigate('/verifyemail', { replace: true });
+            } catch (err: any) {
+                setError(err.response?.data?.message || 'Invalid login credentials');
+            } finally {
+                setLoading(false);
             }
         }
-
     }
-    
+
 
     return (
         <>
@@ -100,12 +96,16 @@ export default function Login() {
                         <input ref={userPasswordInput} style={formInput} placeholder="Password" type="password" required />
                     </div>
 
+                    {error && <span style={{ color: 'red', fontSize: '.9rem' }}>{error}</span>}
+
                     <div style={{ width: '100%', display: 'flex', marginBlockEnd: '1rem' }}>
                         <span style={{ color: '#10a7f9', cursor: 'pointer' }} onClick={() => navigate('/signup', { replace: true })}>Create Account</span>
                         <span style={{ marginInlineStart: 'auto', cursor: 'pointer' }}>Forgot password?</span>
                     </div>
 
-                    <button style={submitButtont} type="submit">Get Started</button>
+                    <button style={submitButtont} type="submit" disabled={loading}>
+                        {loading ? 'Logging in...' : 'Get Started'}
+                    </button>
                 </form>
             </div>
         </>

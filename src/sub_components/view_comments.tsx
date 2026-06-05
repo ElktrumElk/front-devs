@@ -1,6 +1,5 @@
 import { useRef, type SetStateAction, useEffect } from "react"
-import { UserComment } from "../data/comments";
-import { postsData } from "../data/mockData";
+import { useComments } from "../data/comments";
 import { useState } from "react";
 
 interface viewcomment {
@@ -8,27 +7,15 @@ interface viewcomment {
     commentId: string
 }
 
-interface CommentItem {
-    id: number;
-    userCommentName: string;
-    comment: string;
-    time: string;
-}
-
 export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcomment) {
-    // FIX 1: Convert to 'unknown' first to cleanly map your hook's rigid return shape
-    const { comments, setComments } = UserComment() as unknown as {
-        comments: Record<string, CommentItem[]>;
-        setComments: React.Dispatch<React.SetStateAction<Record<string, CommentItem[]>>>
-    };
-
-    const initialComments: CommentItem[] = comments[commentId] ? comments[commentId] : [];
-    const [filterComment, setFilterCmt] = useState<CommentItem[]>(initialComments);
-
-    const [commentImage] = postsData.filter(prev => prev.postId === commentId);
+    const { comments, addComment, loading } = useComments(commentId);
+    const [filterComment, setFilterCmt] = useState(comments);
     const commentInput = useRef<HTMLInputElement>(null);
 
-    // Prevent body scroll when modal is open
+    useEffect(() => {
+        setFilterCmt(comments);
+    }, [comments]);
+
     useEffect(() => {
         document.body.classList.add('modal-open');
         return () => {
@@ -36,29 +23,16 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
         };
     }, []);
 
-    const handleComments = () => {
+    const handleComments = async () => {
         const value = commentInput.current?.value;
         if (!value) return;
 
-        const newComment: CommentItem = {
-            id: filterComment.length + 1,
-            userCommentName: 'ElktrumElk',
-            comment: value,
-            time: 'just now'
-        };
-
-        const updatedTargetComments = [newComment, ...filterComment];
-
-        setFilterCmt(updatedTargetComments);
-        setComments({
-            ...comments,
-            [commentId]: updatedTargetComments
-        });
-
-        // FIX 2: Added optional chaining verification before reassignment to protect against null values
-        if (commentInput.current) {
-            commentInput.current.value = '';
-        }
+        try {
+            await addComment(value);
+            if (commentInput.current) {
+                commentInput.current.value = '';
+            }
+        } catch {}
     };
 
     return (
@@ -73,37 +47,35 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
                             </button>
                         </header>
                     <section style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', overflowY: 'auto' }}>
-                        <div style={styles.figureImageCnt}>
-                            {commentImage && <img style={styles.previewImage} src={commentImage.img} alt="post preview" />}
-                        </div>
+                        {loading && <span style={{ color: 'GrayText', padding: '1rem' }}>Loading comments...</span>}
 
                         <section style={{ display: 'flex', width: '100%', flexDirection: 'column', gap: '.5rem' }}>
                             {
                                 filterComment.map((cmt, idx) => (
 
-                                    <div key={idx} style={{ display: 'flex', gap: '.5rem' }}>
+                                    <div key={cmt.id || idx} style={{ display: 'flex', gap: '.5rem' }}>
                                         <div style={styles.profileImage} className="p-img-cnt">
-                                            <span>{cmt.userCommentName.substring(0, 1)}</span>
+                                            <span>{cmt.author?.username?.substring(0, 1) || '?'}</span>
                                         </div>
 
                                         <article style={styles.article} className="article">
                                             <header style={{ width: '100%', display: 'flex', justifyContent: 'space-between', gap: '.5rem' }}>
                                                 <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center' }}>
-                                                    <h4>{cmt.userCommentName}</h4>
+                                                    <h4>{cmt.author?.username || 'Anonymous'}</h4>
                                                 </div>
                                                 <div>
-                                                    <span style={{ color: 'GrayText', fontSize: '.8rem' }}>{cmt.time}</span>
+                                                    <span style={{ color: 'GrayText', fontSize: '.8rem' }}>{cmt.createdAt ? new Date(cmt.createdAt).toLocaleDateString() : ''}</span>
                                                 </div>
                                             </header>
                                             <div>
-                                                <p>{cmt.comment}</p>
+                                                <p>{cmt.content}</p>
                                             </div>
                                         </article>
                                     </div>
                                 ))
                             }
                             {
-                                filterComment.length === 0 &&
+                                filterComment.length === 0 && !loading &&
                                 <div style={{ width: '100%', display: 'flex', height: '15rem', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                     <span style={{ color: "GrayText" }}>No comment Available</span>
                                 </div>
@@ -171,16 +143,4 @@ const styles: { [key: string]: React.CSSProperties } = {
         background: '#023139',
         color: 'white'
     },
-    figureImageCnt: {
-        width: '100%',
-        maxHeight: '200px',
-        overflow: 'hidden',
-        borderRadius: '1rem',
-        flex: '0 0 auto'
-    },
-    previewImage: {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover'
-    }
-};
+}

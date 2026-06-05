@@ -23,7 +23,7 @@ const imageSliderSection: React.CSSProperties = {
 
 interface home {
     setIsViewCard: React.Dispatch<SetStateAction<boolean>>,
-    setViewCardId: React.Dispatch<SetStateAction<number>>,
+    setViewCardId: React.Dispatch<SetStateAction<string>>,
     setViewComment: React.Dispatch<SetStateAction<boolean>>,
     setCommentId: React.Dispatch<SetStateAction<string>>,
     setCardScale: React.Dispatch<SetStateAction<number>>,

@@ -1,13 +1,18 @@
 import { useRef, useState, type ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../sub_components/categories";
-//import { styleResponsive } from "../styles/responsivness";
+import { createPost } from "../api/posts";
+import { uploadImage } from "../api/upload";
 
 
 
 export default function AddPost() {
 
+    const navigate = useNavigate();
     const MAX_LENGTH = 2200;
     const [remainingChars, setRemainingChars] = useState(MAX_LENGTH);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputLength = e.target.value.length;
@@ -15,12 +20,17 @@ export default function AddPost() {
     };
 
     const categories = categoriesData.filter(x => x !== 'All');
-    const [cat, setCat] = useState(categories);
+    const [cat] = useState(categories);
 
     const imageSelector = useRef<HTMLInputElement>(null);
     const [isImageSelected, setImageSelected] = useState(false);
     const [imageSrc, setImageSrc] = useState('');
     const [imageOpacity, setImageOpacity] = useState(1);
+
+    const titleRef = useRef<HTMLInputElement>(null);
+    const descriptionRef = useRef<HTMLTextAreaElement>(null);
+    const categoryRef = useRef<HTMLSelectElement>(null);
+    const previewLinkRef = useRef<HTMLInputElement>(null);
 
     const handleImageSelect = () => {
         imageSelector.current?.click();
@@ -29,13 +39,10 @@ export default function AddPost() {
     const handleImageSelected = () => {
         const image = imageSelector.current?.files?.[0];
 
-
         if (image?.type.startsWith("image/")) {
-
             requestAnimationFrame(() => {
                 setImageOpacity(1);
             });
-
             const url = URL.createObjectURL(image);
             setImageSrc(url);
             setImageSelected(true);
@@ -43,9 +50,7 @@ export default function AddPost() {
     }
 
     const destoryImage = () => {
-
         setImageOpacity(0);
-
         setTimeout(() => {
             URL.revokeObjectURL(imageSrc);
             setImageSelected(false);
@@ -69,23 +74,47 @@ export default function AddPost() {
     const tagInputElement = useRef<HTMLInputElement>(null);
     
     const handleAddTag = () => {
-        // Get the value safely, defaulting to an empty string if undefined
         const rawValue = tagInputElement.current?.value;
-
-        // Ensure value is a string and fallback to 'unknown' if empty or missing
         const value = rawValue && rawValue.trim().length > 0 ? rawValue : 'unknown';
-
         handleTag(value);
-        setCat(prev => [value, ...prev]);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            let imgUrl = '';
+            if (imageSelector.current?.files?.[0]) {
+                const { data } = await uploadImage(imageSelector.current.files[0]);
+                imgUrl = data.url;
+            }
+
+            await createPost({
+                title: titleRef.current?.value || '',
+                description: descriptionRef.current?.value || '',
+                category: categoryRef.current?.value || 'General',
+                img: imgUrl,
+                previewLink: previewLinkRef.current?.value || '',
+                tags: tag,
+            });
+
+            navigate('/app/home');
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to create post');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem' }}>
-            <form style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem', width: '100%' }}>
                     <label htmlFor="title" style={{ fontWeight: 'bold' }}>Title</label>
-                    <input id="title" placeholder="Title: Responsive Web design" required style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
+                    <input ref={titleRef} id="title" placeholder="Title: Responsive Web design" required style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
                 </div>
 
                 <div style={{ width: '100%', background: 'white', borderRadius: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' }}>
@@ -95,7 +124,7 @@ export default function AddPost() {
                         <>
                             <div onClick={handleImageSelect} style={{ width: '50px', height: '50px', borderRadius: '.5rem', border: '1px dashed red', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                 <img src="https://img.icons8.com/?size=100&id=oF7jXJoq6nNX&format=png&color=000000" width={'20px'} height={'20px'} alt="add" />
-                                <input ref={imageSelector} onChange={handleImageSelected} type="file" accept="image/*" hidden required />
+                                <input ref={imageSelector} onChange={handleImageSelected} type="file" accept="image/*" hidden />
 
                             </div>
                         </>
@@ -116,7 +145,7 @@ export default function AddPost() {
                     }
 
 
-                    <textarea onChange={handleChange} maxLength={2000} required placeholder="Say something about this post..." style={{ width: '100%', height: '5rem', resize: 'none', outline: 'none', border: 'none', fontSize: '1rem' }}></textarea>
+                    <textarea ref={descriptionRef} onChange={handleChange} maxLength={2000} required placeholder="Say something about this post..." style={{ width: '100%', height: '5rem', resize: 'none', outline: 'none', border: 'none', fontSize: '1rem' }}></textarea>
                     <div style={{ display: 'flex', color: 'GrayText', fontSize: '.8rem', alignSelf: 'flex-end' }}>
                         <span>{remainingChars}</span>
                     </div>
@@ -182,7 +211,7 @@ export default function AddPost() {
                 <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '.2rem', width: '100%' }}>
                         <label htmlFor="cat" style={{ fontSize: '.9rem' }}>Add Category</label>
-                        <select id="cat" required style={{ width: '100%', padding: '1rem', borderRadius: '.5rem', outline: 'none', border: 'none', background: 'white' }}>
+                        <select ref={categoryRef} id="cat" required style={{ width: '100%', padding: '1rem', borderRadius: '.5rem', outline: 'none', border: 'none', background: 'white' }}>
                             {
                                 categories.map((cat, idx) => (
                                     <option key={idx} >{cat}</option>
@@ -194,10 +223,14 @@ export default function AddPost() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem', width: '100%' }}>
                     <label htmlFor="prev-link" >Preview Link</label>
-                    <input id="prev-link" placeholder="https://myapp.com" style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
+                    <input ref={previewLinkRef} id="prev-link" placeholder="https://myapp.com" style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
                 </div>
 
-                <button style={{ width: '100%', padding: '1rem', borderRadius: '1rem', marginBlockStart: '4rem', marginBlockEnd: '1rem', background: '#010a1b', border: 'none', color: 'white' }}>Post</button>
+                {error && <span style={{ color: 'red', fontSize: '.9rem' }}>{error}</span>}
+
+                <button type="submit" disabled={loading} style={{ width: '100%', padding: '1rem', borderRadius: '1rem', marginBlockStart: '4rem', marginBlockEnd: '1rem', background: '#010a1b', border: 'none', color: 'white' }}>
+                    {loading ? 'Posting...' : 'Post'}
+                </button>
             </form>
         </div>
     )

@@ -26,7 +26,10 @@ export default function UserMenuList() {
     const filterMenuItems = isMobile ? menuItems : menuItems.filter(x => x.label !== 'Posts');
 
     const handleLogout = () => {
-        localStorage.clear();
+        localStorage.removeItem('token');
+        localStorage.removeItem('data');
+        localStorage.removeItem('isLogin');
+        localStorage.removeItem('isEmailVerify');
         navigate("/login", { replace: true });
     };
 

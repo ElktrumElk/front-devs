@@ -9,7 +9,7 @@ interface coord {
 interface viewcardProps {
     setPanelOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setCardScale: React.Dispatch<React.SetStateAction<number>>,
-    postId: number,
+    postId: string,
     viewCardCoordinate: coord
 }
 

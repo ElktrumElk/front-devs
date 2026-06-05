@@ -1,6 +1,6 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { userAccount } from "../data/accountDB"
+import { verifyEmail, login } from "../api/auth"
 
 const logHeader: React.CSSProperties = {
     width: '100%',
@@ -48,26 +48,34 @@ export default function VerifyEmail() {
 
     const codeInput = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
-    const { Database } = userAccount();
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleCodeVerification = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleCodeVerification = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setError('');
+
         const code = codeInput.current?.value;
+        const email = localStorage.getItem('email') || localStorage.getItem('verificationEmail');
 
-        if (code) {
-            if (code === '123456') {
-                const email = localStorage.getItem('email');
-
-                if (email) {
-                    const user = (Database)[email]
-                    localStorage.setItem('data', JSON.stringify(user));
-                    localStorage.setItem('isEmailVerify', 'true');
-                    navigate('/app/home');
-                }
+        if (code && email) {
+            setLoading(true);
+            try {
+                await verifyEmail({ email, code });
+                const password = localStorage.getItem('_tempPassword');
+                const { data } = await login({ email, password: password || '' });
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('data', JSON.stringify(data.user));
+                localStorage.removeItem('_tempPassword');
+                localStorage.removeItem('verificationEmail');
+                navigate('/app/home');
+            } catch (err: any) {
+                setError(err.response?.data?.message || 'Invalid verification code');
+            } finally {
+                setLoading(false);
             }
-            else {
-                alert('wrong code');
-            }
+        } else {
+            setError('No email found. Please sign up again.');
         }
     }
 
@@ -82,7 +90,7 @@ export default function VerifyEmail() {
             e.target.value = value.toString().replace(/[a-z | A-z]/g, '');
         }
     }
-    
+
 
 
     return (
@@ -100,7 +108,11 @@ export default function VerifyEmail() {
                         <input ref={codeInput} onChange={(e) => maxMizeCharacter(e)} style={formInput} placeholder="000000" type="text" required />
                     </div>
 
-                    <button style={submitButtont} type="submit">Verify</button>
+                    {error && <span style={{ color: 'red', fontSize: '.9rem' }}>{error}</span>}
+
+                    <button style={submitButtont} type="submit" disabled={loading}>
+                        {loading ? 'Verifying...' : 'Verify'}
+                    </button>
                 </form>
             </div>
         </>

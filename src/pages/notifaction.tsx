@@ -1,15 +1,13 @@
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { styleResponsive } from "../styles/responsivness";
-import { userNotification } from "../data/user_notification";
+import { getNotifications, markAsRead, markAllAsRead, type Notification } from "../api/notifications";
 
-// --- INLINE STYLES ---
 const panelWrapper: React.CSSProperties = {
     width: "100%",
     height: "500px",
     background: "#ffffff",
     borderRadius: "16px",
-
     border: "1px solid #e2e8f0",
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     display: "flex",
@@ -71,7 +69,7 @@ const actionBtn: React.CSSProperties = {
 
 const listContainer: React.CSSProperties = {
     flexGrow: 1,
-    overflowY: "auto", // Enables scrolling within the fixed panel boundaries
+    overflowY: "auto",
     padding: "0.5rem 0"
 };
 
@@ -132,43 +130,36 @@ const filterButton: React.CSSProperties = {
     borderRadius: '1rem',
     background: 'none'
 }
-// --- TYPES ---
-interface Notification {
-    id: string;
-    message: string;
-    time: string;
-    isUnread: boolean;
-    type: "like" | "comment" | "system";
-}
-
 
 export default function NotificationPanel() {
 
-    const { notify } = userNotification();
-    const data = localStorage.getItem('data');
-    const parsedData = data ? JSON.parse(data) : null;
-    const userTag = parsedData?.usertag?.replace("@", '') || '';
-
-
-    // Mock Database State Array
-    const [notifications, setNotifications] = useState<Notification[]>(notify[userTag as keyof typeof notify] as Notification[] || []);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [loading, setLoading] = useState(true);
     const unreadCount = notifications.filter(n => n.isUnread).length;
     const { isMobile } = styleResponsive();
 
-    // --- HANDLERS ---
+    useEffect(() => {
+        setLoading(true);
+        getNotifications()
+            .then(({ data }) => setNotifications(data))
+            .catch(() => setNotifications([]))
+            .finally(() => setLoading(false));
+    }, []);
+
     const handleMarkAsRead = (id: string) => {
+        markAsRead(id).catch(() => {});
         setNotifications(prev =>
             prev.map(n => n.id === id ? { ...n, isUnread: false } : n)
         );
     };
 
     const handleMarkAllRead = () => {
+        markAllAsRead().catch(() => {});
         setNotifications(prev => prev.map(n => ({ ...n, isUnread: false })));
     };
 
     return (
         <div style={isMobile ? panelWrapperMobile : panelWrapper} className="notify-panel-miniDesktop">
-            {/* Panel Top Heading Controls */}
             <div style={panelHeader}>
                 <h3 style={titleStyle}>
                     Notifications
@@ -184,11 +175,13 @@ export default function NotificationPanel() {
                 <button style={filterButton}>All</button>
                 <button style={filterButton}>Unread</button>
             </div>
-            {/* Main Notifications Scroll Window */}
             <div style={listContainer}>
-                {notifications.length === 0 ? (
+                {loading ? (
                     <div style={emptyState}>
-
+                        <span>Loading notifications...</span>
+                    </div>
+                ) : notifications.length === 0 ? (
+                    <div style={emptyState}>
                         <span>All caught up! No notifications.</span>
                     </div>
                 ) : (
@@ -198,12 +191,11 @@ export default function NotificationPanel() {
                             style={itemStyle(item.isUnread)}
                             onClick={() => handleMarkAsRead(item.id)}
                         >
-                            {/* Unread Active Blue Circle Indicator */}
                             {item.isUnread && <div style={indicatorStyle} />}
 
                             <div style={contentWrapper}>
                                 <p style={messageStyle}>{item.message}</p>
-                                <span style={timeStyle}>{item.time}</span>
+                                <span style={timeStyle}>{new Date(item.createdAt).toLocaleDateString()}</span>
                             </div>
                         </div>
                     ))

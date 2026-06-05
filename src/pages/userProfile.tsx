@@ -1,16 +1,16 @@
 import type React from "react";
-import { postsData } from "../data/mockData";
 import { SubPostCard } from "../sub_components/sub_post_cards";
 import StyleUtilities from "../styles/style_utility";
 import { useEffect, useState, type SetStateAction } from "react";
 import UserMenuList from "../sub_components/user_profile_menu_list";
 import { styleResponsive } from "../styles/responsivness";
-import { fetchData } from "../data/fetch_data";
+import { getMe } from "../api/auth";
+import { getUserProfile, type UserProfile } from "../api/users";
+import { getUserPosts, type Post } from "../api/posts";
 import GetIntouchButton from "../sub_components/get_in_touch_btn";
 import { useParams } from "react-router-dom";
 import GetInTouchPanel from "../sub_components/get_intouch_panel";
 
-// --- INLINE STYLES ---
 const pageWrapper: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -26,8 +26,6 @@ const pageWrapper: React.CSSProperties = {
     position: 'relative'
 };
 
-
-// --- INLINE STYLES ---
 const pageWrapperMobile: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -94,71 +92,62 @@ const emailStyle: React.CSSProperties = {
     margin: 0
 };
 
-interface dat {
-    id: number,
-    username: string,
-    email: string,
-    fullname: string,
-    avatarUrl: string,
-    bio: string,
-    ratings: number,
-    followers: number
-}
-
 interface userprofile {
     expandPost: React.Dispatch<SetStateAction<boolean>>,
-    postId: React.Dispatch<SetStateAction<number>>,
+    postId: React.Dispatch<SetStateAction<string>>,
     isPublicView?: boolean
 }
 
 export default function UserProfileMenu({ expandPost, postId, isPublicView = false }: userprofile) {
     const { username } = useParams<{ username: string }>();
 
-    const posts = postsData;
-    let userTag = localStorage.getItem('data');
-
-    const currentUserData = userTag ? JSON.parse(userTag)?.usertag : null;
-
-    const userPost = isPublicView
-        ? posts.filter(x => x.username === username)
-        : posts.filter(x => x.usertag === currentUserData);
-
+    const [userPosts, setUserPosts] = useState<Post[]>([]);
+    const [userData, setUserData] = useState<UserProfile | null>(null);
+    const [loading, setLoading] = useState(true);
     const { subPostCards } = StyleUtilities();
     const [userMenu, showMenu] = useState(false);
     const { isMobile } = styleResponsive();
-    const [userData, setUserData] = useState<dat | null>(null);
+    const [showGetIntouchPanel, setGetIntouchPane] = useState<boolean>(false);
 
     useEffect(() => {
         const f = async () => {
-            if (isPublicView && username) {
-                // For public profile, get data from post data based on username
-                const userPost = posts.find(x => x.username === username);
-                if (userPost) {
-                    setUserData({
-                        id: userPost.id,
-                        username: userPost.username,
-                        email: 'user@example.com',
-                        fullname: userPost.username,
-                        avatarUrl: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                        bio: 'User bio',
-                        ratings: userPost.ratings,
-                        followers: 12000
-                    });
+            setLoading(true);
+            try {
+                if (isPublicView && username) {
+                    const [profileRes, postsRes] = await Promise.all([
+                        getUserProfile(username),
+                        getUserPosts(username)
+                    ]);
+                    setUserData(profileRes.data);
+                    setUserPosts(postsRes.data.posts);
+                } else {
+                    const { data } = await getMe();
+                    setUserData(data);
+                    const postsRes = await getUserPosts(data.username);
+                    setUserPosts(postsRes.data.posts);
                 }
-            } else {
-                // For private profile, get current user data
-                const data = await fetchData();
-                const dat = (data as dat)
-                setUserData(dat)
+            } catch {
+                setUserData(null);
+                setUserPosts([]);
+            } finally {
+                setLoading(false);
             }
         }
         f();
     }, [isPublicView, username]);
 
-    const isOwnProfile = !isPublicView || (userTag && JSON.parse(userTag)?.username === username);
+    const userTag = localStorage.getItem('data');
+    const parsedData = userTag ? JSON.parse(userTag) : null;
+    const isOwnProfile = !isPublicView || (parsedData?.username === username);
     const showMenu_Button = !isPublicView;
-    const [showGetIntouchPanel, setGetIntouchPane] = useState<boolean>(false);
 
+    if (loading) {
+        return (
+            <div style={isMobile ? pageWrapperMobile : pageWrapper}>
+                <p style={{ textAlign: 'center', color: 'GrayText' }}>Loading profile...</p>
+            </div>
+        );
+    }
 
     return (
 
@@ -176,10 +165,9 @@ export default function UserProfileMenu({ expandPost, postId, isPublicView = fal
                 </div>
             }
 
-            {/* Identity Profile Block */}
             <div style={headerSection}>
                 <div style={avatarWrapper}>
-                    <img src={userData ? userData.avatarUrl : '...'} alt={''} style={avatarImg} />
+                    <img src={userData ? userData.avatarUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png' : '...'} alt={''} style={avatarImg} />
                     <div style={verifiedBadge}>✓</div>
                 </div>
                 <h2 style={nameStyle}>{userData ? userData.username : '...'}</h2>
@@ -188,7 +176,7 @@ export default function UserProfileMenu({ expandPost, postId, isPublicView = fal
                 {!isOwnProfile && (
                     <div style={{ display: 'flex', alignSelf: 'center', marginBlockStart: '1rem' }}>
                         <GetIntouchButton isResponsive={false} showPanel={setGetIntouchPane} panelState={showGetIntouchPanel} />
-                        {showGetIntouchPanel && <GetInTouchPanel />}
+                        {showGetIntouchPanel && <GetInTouchPanel username={username || ''} />}
 
                     </div>
 
@@ -203,21 +191,20 @@ export default function UserProfileMenu({ expandPost, postId, isPublicView = fal
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', justifyItems: 'center', marginBlockStart: '2rem', marginBlockEnd: '2rem' }}>
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <strong>{userData ? userData.followers : '...'}</strong>
+                    <strong>{userData ? userData.followersCount : '...'}</strong>
                     <span style={{ color: 'GrayText' }}>Followers</span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <strong>{userData ? userData.ratings : '...'}</strong>
+                    <strong>{userData ? userData.ratingsTotal : '...'}</strong>
                     <span style={{ color: 'GrayText' }}>Ratings</span>
                 </div>
             </div>
 
             <div>
-                <SubPostCard styles={subPostCards} list={userPost} expand={expandPost} cardId={postId} />
+                <SubPostCard styles={subPostCards} list={userPosts} expand={expandPost} cardId={postId} />
             </div>
 
-            {/*menu list*/}
         </div>
     );
 }
