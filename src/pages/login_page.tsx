@@ -1,7 +1,9 @@
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { userAccount } from "../data/accountDB"
+
 import { styleResponsive } from "../styles/responsivness"
+import { UserLogin } from "../api/authenticate"
+
 
 const logHeader: React.CSSProperties = {
     width: '100%',
@@ -51,31 +53,17 @@ export default function Login() {
     const userPasswordInput = useRef<HTMLInputElement>(null);
     const { isMobile } = styleResponsive();
 
-    const { Database } = userAccount();
+    const {submitCredentials} = UserLogin()
 
-    const handleLogin = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const email = userEmailInput.current?.value;
         const password = userPasswordInput.current?.value;
 
         if (email && password) {
-
-            const user = (Database)[email];
-
-            if (user) {
-                if (user.password === password) {
-                    localStorage.setItem('email', user.email);
-                    localStorage.setItem('isLogin', 'true');
-
-                    navigate('/verifyemail', {replace: true});
-                    
-                } else {
-                    alert('invalid Login 2');
-                }
-            } else {
-                alert("Invalid Login 1");
-            }
+        
+            await submitCredentials({email: email, password: password})
         }
 
     }

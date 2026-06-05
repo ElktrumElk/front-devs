@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent } from "react";
-import { categoriesData } from "../sub_components/categories";
+import { categoriesData } from "../data/componentArray";
 //import { styleResponsive } from "../styles/responsivness";
 
 
@@ -80,21 +80,21 @@ export default function AddPost() {
     };
 
     return (
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem', color: 'var(--global-txt-cl)'}}>
             <form style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem', width: '100%' }}>
                     <label htmlFor="title" style={{ fontWeight: 'bold' }}>Title</label>
-                    <input id="title" placeholder="Title: Responsive Web design" required style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
+                    <input id="title" placeholder="Title: Responsive Web design" required style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem', background: 'none'}} />
                 </div>
 
-                <div style={{ width: '100%', background: 'white', borderRadius: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' }}>
+                <div style={{ width: '100%', background: 'var(--global-panel-section-bg)', borderRadius: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' }}>
 
                     {
                         !isImageSelected &&
                         <>
                             <div onClick={handleImageSelect} style={{ width: '50px', height: '50px', borderRadius: '.5rem', border: '1px dashed red', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                <img src="https://img.icons8.com/?size=100&id=oF7jXJoq6nNX&format=png&color=000000" width={'20px'} height={'20px'} alt="add" />
+                                <img src="https://img.icons8.com/?size=100&id=oF7jXJoq6nNX&format=png&color=000000" width={'20px'} height={'20px'} />
                                 <input ref={imageSelector} onChange={handleImageSelected} type="file" accept="image/*" hidden required />
 
                             </div>
@@ -103,11 +103,11 @@ export default function AddPost() {
                     {
                         isImageSelected &&
                         <>
-
-                            <div style={{ width: '100%', opacity: imageOpacity, transition: 'opacity .4s ease', background: 'black', borderRadius: '1rem', objectFit: 'cover', overflow: 'hidden', position: 'relative' }}>
+                            {/**The container that holds the image */}
+                            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', maxHeight: '300px', opacity: imageOpacity, transition: 'opacity .4s ease', background: 'black', borderRadius: '1rem', objectFit: 'cover', overflow: 'hidden', position: 'relative' }}>
 
                                 <div onClick={destoryImage} style={{ width: '30px', height: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '2rem', background: '#191818bc', backdropFilter: 'blur(10px)', position: 'absolute', right: '10px', top: '10px' }}>
-                                    <img src="https://img.icons8.com/?size=100&id=1NVn5K29mOSz&format=png&color=ffffff" width={"20"} height={"20"} alt="cancel" />
+                                    <img src="https://img.icons8.com/?size=100&id=1NVn5K29mOSz&format=png&color=ffffff" width={"20"} height={"20"} />
                                 </div>
 
                                 <img style={{ width: '100%' }} src={imageSrc} />
@@ -116,23 +116,23 @@ export default function AddPost() {
                     }
 
 
-                    <textarea onChange={handleChange} maxLength={2000} required placeholder="Say something about this post..." style={{ width: '100%', height: '5rem', resize: 'none', outline: 'none', border: 'none', fontSize: '1rem' }}></textarea>
+                    <textarea onChange={handleChange} maxLength={2000} required placeholder="Say something about this post..." style={{ width: '100%', color: 'var(--global-txt-cl)', height: '5rem', resize: 'none', outline: 'none', border: 'none', fontSize: '1rem', background: 'none' }}></textarea>
                     <div style={{ display: 'flex', color: 'GrayText', fontSize: '.8rem', alignSelf: 'flex-end' }}>
                         <span>{remainingChars}</span>
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '.4rem', width: '100%', position: 'relative', background: 'white', padding: '1rem', borderRadius: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '.4rem', width: '100%', position: 'relative', background: 'var(--global-panel-section-bg)', padding: '1rem', borderRadius: '1rem' }}>
 
 
                     {
                         tag.length !== 0 &&
                         <>
                             <span>Tags</span>
-                            <div style={{ display: 'flex', gap: '.5rem', overflowX: 'auto', background: '#f5f5f5', padding: '.6rem', borderRadius: '.5rem' }}>
+                            <div style={{ display: 'flex', gap: '.5rem', overflowX: 'auto', background: 'var(--global-component-bg)', padding: '.6rem', borderRadius: '.5rem' }}>
                                 {
                                     tag.map((tg, idx) => (
-                                        <div onClick={() => handleTag(tg)} key={idx} style={{ background: '#ffffff', padding: '.5rem', flex: '0 0 auto', borderRadius: '.5rem' }}>
+                                        <div onClick={() => handleTag(tg)} key={idx} style={{ background: 'var(--global-panel-section-bg)', padding: '.5rem', flex: '0 0 auto', borderRadius: '.5rem' }}>
                                             <span>{tg}</span>
                                         </div>
                                     ))
@@ -141,7 +141,7 @@ export default function AddPost() {
                         </>
                     }
                     <span>Add Tags</span>
-                    <ul style={{ display: 'flex', background: '#f5f5f5', overflowX: 'auto', listStyle: 'none', gap: '.5rem', position: 'relative', padding: '.5rem', scrollbarColor: 'transparent', scrollbarWidth: 'none' }}>
+                    <ul style={{ display: 'flex', borderRadius: '1rem', background: 'var(--global-component-bg)', overflowX: 'auto', listStyle: 'none', gap: '.5rem', position: 'relative', padding: '.5rem', scrollbarColor: 'transparent', scrollbarWidth: 'none' }}>
 
                         {
                             !addTagPanel &&
@@ -152,7 +152,7 @@ export default function AddPost() {
 
                                 {
                                     cat.map((cat, idx) => (
-                                        <li onClick={() => handleTag(cat)} key={idx} style={{ backgroundColor: tag.includes(cat) ? '#1499ec40' : 'white', flex: '0 0 auto', padding: '.2rem 1rem', borderRadius: '1rem' }}>{cat}</li>
+                                        <li onClick={() => handleTag(cat)} key={idx} style={{ backgroundColor: tag.includes(cat) ? '#1499ec40' : 'var(--global-panel-section-bg)', flex: '0 0 auto', padding: '.2rem 1rem', borderRadius: '1rem' }}>{cat}</li>
                                     ))
                                 }
                             </>
@@ -182,7 +182,7 @@ export default function AddPost() {
                 <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '.2rem', width: '100%' }}>
                         <label htmlFor="cat" style={{ fontSize: '.9rem' }}>Add Category</label>
-                        <select id="cat" required style={{ width: '100%', padding: '1rem', borderRadius: '.5rem', outline: 'none', border: 'none', background: 'white' }}>
+                        <select id="cat" required style={{ width: '100%', padding: '1rem', borderRadius: '.5rem', outline: 'none', border: 'none', background: 'var(--global-panel-section-bg)' }}>
                             {
                                 categories.map((cat, idx) => (
                                     <option key={idx} >{cat}</option>
@@ -194,7 +194,7 @@ export default function AddPost() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '.3rem', width: '100%' }}>
                     <label htmlFor="prev-link" >Preview Link</label>
-                    <input id="prev-link" placeholder="https://myapp.com" style={{ width: '100%', padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
+                    <input id="prev-link" placeholder="https://myapp.com" style={{ width: '100%', background: 'var(--global-panel-section-bg)', color:"var(--global-txt-cl)", padding: '1rem', outline: 'none', border: 'none', borderRadius: '.5rem', fontSize: '1rem' }} />
                 </div>
 
                 <button style={{ width: '100%', padding: '1rem', borderRadius: '1rem', marginBlockStart: '4rem', marginBlockEnd: '1rem', background: '#010a1b', border: 'none', color: 'white' }}>Post</button>

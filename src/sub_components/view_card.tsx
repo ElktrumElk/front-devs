@@ -22,7 +22,7 @@ export default function ViewCard({ setCardScale, setPanelOpen, postId, viewCardC
     /** Handle close of the view card */
     const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
         if (bk) {
-            if (e.target === bk.current) {
+            if (e.target === e.currentTarget) {
                 requestAnimationFrame(() => {
                     setPop(pop === 0 ? 1 : 0);
                 })
@@ -45,7 +45,12 @@ export default function ViewCard({ setCardScale, setPanelOpen, postId, viewCardC
     return (
         <>
             {
-                <div className="backgroundContainer" ref={bk} style={backgroundContainer} onClick={(e) => { handleClose(e); setCardScale(1) }}>
+                <div className="backgroundContainer" ref={bk} style={backgroundContainer} onClick={(e) => { 
+                    handleClose(e);
+                    if (e.target === e.currentTarget) {
+                        setCardScale(1) 
+                    }
+                 }}>
                     <ViewCardCnt setPanelOpen={setPanelOpen} postId={postId} viewCardCoordinate={viewCardCoordinate} setPop={setPop} pop={pop} setCardScale={setCardScale} />
                 </div>
             }

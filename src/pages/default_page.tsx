@@ -8,14 +8,12 @@ export default function DefaultPage() {
 
     return (
         <div style={{ width: '100%', height: '100%', minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-
             <Routes>
                 <Route path='/splash' element={<SplashScreen />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<Signup />} />
                 <Route path='/verifyemail' element={<VerifyEmail />} />
             </Routes>
-
         </div>
     );
 }

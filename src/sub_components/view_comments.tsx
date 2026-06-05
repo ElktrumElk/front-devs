@@ -63,6 +63,7 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
 
     return (
         <>
+        
             <div style={styles.backgroundContainer} className="backgroundContainer">
                 <div style={styles.viewCommentCnt} className="viewCard">
 
@@ -74,7 +75,7 @@ export default function ViewCommentPanel({ setPanelOpen, commentId }: viewcommen
                         </header>
                     <section style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', overflowY: 'auto' }}>
                         <div style={styles.figureImageCnt}>
-                            {commentImage && <img style={styles.previewImage} src={commentImage.img} alt="post preview" />}
+                            {commentImage && <img style={styles.previewImage} src={commentImage.img}  />}
                         </div>
 
                         <section style={{ display: 'flex', width: '100%', flexDirection: 'column', gap: '.5rem' }}>

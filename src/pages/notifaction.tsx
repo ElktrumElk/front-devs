@@ -6,43 +6,39 @@ import { userNotification } from "../data/user_notification";
 // --- INLINE STYLES ---
 const panelWrapper: React.CSSProperties = {
     width: "100%",
-    height: "500px",
-    background: "#ffffff",
+    height: "100dvh",
+    background: "var(--global-component-bg)",
     borderRadius: "16px",
-
-    border: "1px solid #e2e8f0",
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     display: "flex",
     flexDirection: "column",
     zIndex: 100,
     justifySelf: 'center'
+    
 };
 
 const panelWrapperMobile: React.CSSProperties = {
-    width: "100%",
-    height: "500px",
-    background: "#ffffff",
+    inset: 0,
+    background: "var(--global-component-bg)",
     borderRadius: "16px",
-    border: "1px solid #e2e8f0",
+    
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     display: "flex",
     flexDirection: "column",
-    zIndex: 100,
-    justifySelf: 'center'
+    position: 'fixed'
 };
 
 const panelHeader: React.CSSProperties = {
     padding: "1rem 1.25rem",
-    borderBottom: "1px solid #f1f5f9",
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    color: 'var(--global-txt-cl)'
 };
 
 const titleStyle: React.CSSProperties = {
     fontSize: "1.1rem",
     fontWeight: "700",
-    color: "#010a1b",
     margin: 0,
     display: "flex",
     alignItems: "center",
@@ -80,8 +76,8 @@ const itemStyle = (isUnread: boolean): React.CSSProperties => ({
     display: "flex",
     gap: "0.75rem",
     alignItems: "flex-start",
-    backgroundColor: isUnread ? "#f8fafc" : "#ffffff",
-    borderBottom: "1px solid #f1f5f9",
+    color: isUnread ? 'var(--global-txt-cl)' : 'gray',
+    borderBottom: "1px solid #24354687",
     cursor: "pointer",
     transition: "background-color 0.2s ease"
 });
@@ -104,7 +100,6 @@ const contentWrapper: React.CSSProperties = {
 
 const messageStyle: React.CSSProperties = {
     fontSize: "0.9rem",
-    color: "#334155",
     margin: 0,
     lineHeight: "1.4"
 };

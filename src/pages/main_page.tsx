@@ -8,10 +8,14 @@ import { styleResponsive } from '../styles/responsivness';
 import DesktopSidebar from '../components/desktop_side_bar';
 import UserProfile from './userProfile';
 import NotificationPanel from './notifaction';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ViewCard from '../sub_components/view_card';
 import ViewCommentPanel from '../sub_components/view_comments';
 import useViewCardContext from '../context/view_card_context';
+import Settings from './settings';
+import { UserTheme } from '../context/user_theme';
+import UserPostsPage from './userPosts';
+
 
 
 
@@ -68,8 +72,14 @@ export default function MainPage() {
     const [viewCardCordinates, setViewCardCoordinates] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const [cardScale, setCardScale] = useState<number>(1);
     const location = useLocation();
-    const hiddenHeaderRoutes = ['/app/post', '/app/user/profile', '/app/user/notification'];
+    const hiddenHeaderRoutes = ['/app/post', '/app/user/profile', '/app/user/notification', '/app/settings'];
     const showHeader = !hiddenHeaderRoutes.includes(location.pathname);
+
+    const {colorMode} = useContext(UserTheme)
+
+    useEffect(() => {
+        document.body.style.background = colorMode === 'Dark' ? '#000' : '#f5f5f5'
+    }, [colorMode])
 
     return (
         <>
@@ -90,6 +100,8 @@ export default function MainPage() {
                         <Route path='/user/profile' element={<UserProfile postId={setViewCardId} expandPost={setIsViewCard} />} />
                         <Route path='/user/:username' element={<UserProfile postId={setViewCardId} expandPost={setIsViewCard} isPublicView={true} />} />
                         <Route path='/user/notification' element={!isDesktop ? <NotificationPanel /> : <Home setCardScale={setCardScale} cardScale={cardScale} setViewCardCoordinates={setViewCardCoordinates} setIsViewCard={setIsViewCard} setViewCardId={setViewCardId} setViewComment={setViewComment} setCommentId={setCommentId} />} />
+                        <Route path={'/settings'} element={<Settings />} />
+                        <Route path={'/user/post'} element={<UserPostsPage expandPost={setIsViewCard} postId={setViewCardId}/>} />
                     </Routes>
                 </div>
 
@@ -98,7 +110,7 @@ export default function MainPage() {
                         isDesktop && !isMiniDesktop &&
                         <>
                             <NotificationPanel />
-                            <div style={{ width: '100%', background: '#ffffff', padding: '.5rem' }}>
+                            <div style={{ width: '100%', background: 'var(--global-component-bg)', padding: '.5rem' }}>
                                 <AddPost />
                             </div>
                         </>
