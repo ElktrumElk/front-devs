@@ -8,7 +8,7 @@ import type { userprofile } from "./userProfile"
 
 export default function UserPostsPage ({expandPost, postId}: userprofile) {
     const data = localStorage.getItem('data')
-    const userTag = JSON.parse(data).usertag || null
+    const userTag = JSON.parse(data as unknown as string).usertag || null
     const postByUser = postsData.filter(x => x.usertag === userTag)
     const {subPostCards} = StyleUtilities()
 
