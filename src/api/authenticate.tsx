@@ -24,7 +24,7 @@ export const GetData = () => {
 
   const userData = async () => {
     const reqData = localStorage.getItem("data");
-    const parseData = JSON.parse(reqData);
+    const parseData = JSON.parse(reqData as unknown as string);
 
     if (parseData) {
       const data = new Promise((resolve) => {
