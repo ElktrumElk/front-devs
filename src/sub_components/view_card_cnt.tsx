@@ -36,7 +36,7 @@ export default function ViewCardCnt({
 
   const handleCloseMobile = () => {
     setPanelOpen(false);
-    setCardScale(1);
+    setCardScale?.(1);
 
     return;
   };
