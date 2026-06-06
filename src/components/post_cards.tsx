@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { postsData } from "../data/mockData"
 import { styleResponsive } from "../styles/responsivness";
@@ -79,7 +79,7 @@ export default function PostCards({ postByCategory, cardScale, setCardScale, exp
 
     
 
-    const { colorMode } = useContext(UserTheme);
+    
     const [follow, setFollow] = useState<number[]>([])
     
     const handleFollow = (idx: number) => {
