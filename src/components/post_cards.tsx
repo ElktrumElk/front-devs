@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { postsData } from "../data/mockData"
 import { styleResponsive } from "../styles/responsivness";
 import RateCard from "../sub_components/rate_card";
-import { UserTheme } from "../context/user_theme";
 
 const likesharecnt: React.CSSProperties = {
     display: 'flex',
