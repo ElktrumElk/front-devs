@@ -1,27 +1,12 @@
 import { useState } from "react";
+import { categoriesData } from "../data/componentArray";
 
 interface cat {
     setCategory: CallableFunction
 }
 
-export const categoriesData = [
-    'All',
-    'Portfolio',
-    'Career & Insights',
-    'Educational & Tips',
-    'Micro-Tutorials',
-    'UI/UX Design',
-    'Code Snippets',
-    'Resources',
-    'Tech Stack',
-    'Open Source',
-    'Performance',
-    'Accessibility',
-    'Behind the Scenes'
-];
-
-
 export default function Categories({setCategory}: cat) {
+    
     // 1. Initialize state with the first category ('All')
     const [activeCat, setActiveCat] = useState('All');
 

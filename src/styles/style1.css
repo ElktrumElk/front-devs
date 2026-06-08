@@ -1,3 +1,22 @@
+:root {
+    --global-component-bg: white;
+    --global-component-bg-b: white;
+    --global-panel-section-bg: rgb(226, 226, 226);
+    --global-border-cl: rgba(75, 74, 74, 0.266);
+    --global-txt-cl: black;
+}
+
+
+body.dark {
+    --global-component-bg: rgba(9, 9, 9);
+    --global-component-bg-b: rgba(21, 21, 21, 0.589);
+
+    --global-border-cl: rgba(55, 55, 55, 0.576);
+    --global-panel-section-bg: rgb(21, 21, 21);
+    --global-txt-cl: white;
+
+}
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -72,10 +91,12 @@ textarea {
     width: 100%;
     flex-grow: 1;
     height: 100%;
+    
 }
 
 .mainCnt {
     overflow-y: hidden !important;
+    
 }
 
 .subWrapper::-webkit-scrollbar {
@@ -84,7 +105,9 @@ textarea {
 
 
 
-
+.viewCard {
+    background: var(--global-component-bg) !important;
+}
 @media (min-width: 1024px) {
     .app {
         position: fixed;

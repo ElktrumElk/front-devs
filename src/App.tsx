@@ -1,31 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 import DefaultPage from "./pages/default_page";
 import MainPage from "./pages/main_page";
-import { userFallBack } from "./modules/endpoint_fallback";
-import { useValidation } from "./context/validate_user";
-import SplashScreen from "./pages/splash_screen";
 
 export default function App() {
 
-  const { setOnValidation, onValidation } = useValidation();
-
-  userFallBack(setOnValidation);
-
-  if (onValidation) {
-    return <div className="app">
-      <SplashScreen />
-    </div>
-  }
-
   return (
     <>
-      <div className='app'>
+      <div className="app">
         <Routes>
           <Route path="/*" element={<DefaultPage />} />
           <Route path="/app/*" element={<MainPage />}></Route>
         </Routes>
       </div>
     </>
-  )
+  );
 }
-
