@@ -130,16 +130,17 @@ export default function StyleUtilities() {
     const leftItemBlock: React.CSSProperties = {
         display: "flex",
         alignItems: "center",
-        gap: ".5rem",
+        gap: "1rem",
         borderBottom: '1px solid var(--global-border-cl)',
         flex: '1',
         paddingBlockEnd: '1rem',
-        color: 'var(--global-txt-cl)'
+        color: 'var(--global-txt-cl)',
+        
 
     };
 
     const labelStyle: React.CSSProperties = {
-        fontSize: "1rem",
+        fontSize: ".9rem",
         fontWeight: "500",
         color: "var(--global-txt-cl)"
     };
