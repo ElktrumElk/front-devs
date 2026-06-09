@@ -6,7 +6,7 @@ interface provider {
 }
 export function UserThemeProvider({ children }: provider) {
 
-    const [colorMode, setColorMode] = useState<string>('ligh')
+    const [colorMode, setColorMode] = useState<string>('light')
 
     return (
         <>

@@ -67,6 +67,7 @@ export default function Login() {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('data', JSON.stringify(data.user));
                 localStorage.setItem('_tempPassword', password);
+                localStorage.setItem('verificationEmail', email);
                 navigate('/verifyemail', { replace: true });
             } catch (err: any) {
                 setError(err.response?.data?.message || 'Invalid login credentials');
