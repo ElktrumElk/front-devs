@@ -1,42 +1,36 @@
 import { useRef, useState, type Dispatch, type SetStateAction } from "react";
-import { postsData } from "../data/mockData";
+import { searchPosts, type Post } from "../api/posts";
 import { SubPostCard } from "../sub_components/sub_post_cards";
 import StyleUtilities from "../styles/style_utility";
 
-interface Post {
-    id: number;
-    username: string;
-    category: string;
-    img: string;
-    description: string;
-    ratings: number;
-}
-
 interface SearchProps {
     setIsViewCard: Dispatch<SetStateAction<boolean>>;
-    setViewCardId: Dispatch<SetStateAction<number>>;
+    setViewCardId: Dispatch<SetStateAction<string>>;
 }
 
 export default function Search({ setIsViewCard, setViewCardId }: SearchProps) {
 
     const [recentSearch, setRecentSearch] = useState<Post[]>([]);
+    const [loading, setLoading] = useState(false);
     const searchInput = useRef<HTMLInputElement>(null);
     const { subPostCards } = StyleUtilities();
     
-
-    const handleFilter = () => {
-        const query = searchInput.current?.value.toLowerCase();
+    const handleFilter = async () => {
+        const query = searchInput.current?.value?.toLowerCase();
         if (!query) {
             setRecentSearch([]);
             return;
         }
 
-        const results = postsData.filter(post =>
-            post.category.toLowerCase().includes(query) ||
-            post.description.toLowerCase().includes(query) ||
-            post.username.toLowerCase().includes(query)
-        );
-        setRecentSearch(results);
+        setLoading(true);
+        try {
+            const { data } = await searchPosts({ q: query });
+            setRecentSearch(data.posts);
+        } catch {
+            setRecentSearch([]);
+        } finally {
+            setLoading(false);
+        }
     }
 
 
@@ -55,7 +49,7 @@ export default function Search({ setIsViewCard, setViewCardId }: SearchProps) {
             </div>
 
             <div style={subPostCards.resultsHeader}>
-                {recentSearch.length > 0 ? "Results" : "Recent Searches"}
+                {loading ? "Searching..." : recentSearch.length > 0 ? "Results" : "Recent Searches"}
             </div>
 
             <SubPostCard styles={subPostCards} list={recentSearch} expand={setIsViewCard} cardId={setViewCardId} />

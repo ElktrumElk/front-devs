@@ -1,25 +1,32 @@
+import { useState, useEffect, useCallback } from "react";
+import { getComments, addComment as apiAddComment, type Comment } from "../api/posts";
 
-import { useState } from "react"
+export function useComments(postId: string) {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  const fetchComments = useCallback(async () => {
+    if (!postId) return;
+    setLoading(true);
+    try {
+      const { data } = await getComments(postId);
+      setComments(data);
+    } catch {
+      setComments([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [postId]);
 
-export function UserComment() {
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
 
+  const addComment = async (content: string) => {
+    const { data } = await apiAddComment(postId, content);
+    setComments(prev => [data, ...prev]);
+    return data;
+  };
 
-    const [comments, setComments] = useState({
-        c01: [
-            { id: 2, userCommentName: 'AG', comment: "I'm Amaized", time: '4 min ago' },
-            { id: 1, userCommentName: 'Sheikito', comment: "I'm Amaized", time: '1 hr ago' },
-        ],
-        c02: [
-            { id: 2, userCommentName: 'William', comment: "Nice layout", time: '4 min ago' },
-            { id: 1, userCommentName: 'favmaclegend', comment: "Well Responsive", time: '27 min ago' },
-        ],
-        c04: [
-            { id: 2, userCommentName: 'Sheik', comment: "I'm Amaized", time: '4 min ago' },
-            { id: 1, userCommentName: 'Sheikito', comment: "I'm Amaized", time: '1 hr ago' },
-        ]
-
-    })
-
-    return { comments, setComments }
+  return { comments, setComments, addComment, loading, refetch: fetchComments };
 }

@@ -2,7 +2,7 @@ import { ProgressBar } from "./progress_bar";
 import GetIntouchButton from "./get_in_touch_btn"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPostsByID } from "../data/get_post_data";
+import { getPostById, getRatingBreakdown, type Post, type RatingBreakdown } from "../api/posts";
 import { styleResponsive } from "../styles/responsivness";
 import GetInTouchPanel from "./get_intouch_panel";
 
@@ -17,22 +17,37 @@ interface viewcardProps {
     setCardScale: React.Dispatch<React.SetStateAction<number>>,
     setPop: React.Dispatch<React.SetStateAction<number>>,
     pop: number,
-    postId: number,
+    postId: string,
     viewCardCoordinate: coord
 }
 
 export default function ViewCardCnt({ setPanelOpen, postId, viewCardCoordinate, setPop, pop }: viewcardProps) {
     const navigate = useNavigate();
-    const { isMobile } = styleResponsive() // mobile users
+    const { isMobile } = styleResponsive()
+    const [cardData, setCardData] = useState<Post | null>(null);
+    const [ratingBreakdown, setRatingBreakdown] = useState<RatingBreakdown | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    /** Data that is render on the view card */
-    const [cardData] = getPostsByID(postId);
-    const ratingsCount = [8, 10, 3, 1, 6]
-    const tRatings = 8 + 10 + 3 + 1 + 6;
-    const displayRatings = tRatings / 5
+    useEffect(() => {
+        if (!postId) return;
+        setLoading(true);
+        Promise.all([
+            getPostById(postId),
+            getRatingBreakdown(postId)
+        ])
+            .then(([postRes, ratingRes]) => {
+                setCardData(postRes.data);
+                setRatingBreakdown(ratingRes.data);
+            })
+            .catch(() => {})
+            .finally(() => setLoading(false));
+    }, [postId]);
+
+    const ratingsCount = ratingBreakdown?.breakdown || [0, 0, 0, 0, 0];
+    const displayRatings = ratingBreakdown?.average || 0;
     const handleRatings = (value: number) => {
-        return value / Math.max(...ratingsCount) * 100;
-
+        const max = Math.max(...ratingsCount, 1);
+        return value / max * 100;
     }
 
     const handleCloseMobile = () => {
@@ -49,22 +64,30 @@ export default function ViewCardCnt({ setPanelOpen, postId, viewCardCoordinate, 
 
     const [showGetIntouchPanel, setGetIntouchPane] = useState<boolean>(false);
 
+    if (loading || !cardData) {
+        return (
+            <div style={{ ...styles.viewCard, transform: `scale(${pop})`, transition: 'transform .2s ease' }}>
+                <p style={{ padding: '2rem', textAlign: 'center', color: 'GrayText' }}>Loading...</p>
+            </div>
+        );
+    }
+
     return (
         <>
             <div className="viewCard viewCardMobile" style={{ ...styles.viewCard, transform: `scale(${pop})`, transition: 'transform .2s ease', transformOrigin: isMobile ? `center ${viewCardCoordinate.y}` : `${viewCardCoordinate.x}px ${viewCardCoordinate.y}px` }}>
                 <header style={styles.header}>
-                    <div className="profileNameCnt" onClick={() => navigate(`/app/user/${cardData.username}`)} style={{ ...styles.profileNameCnt, cursor: 'pointer' }}>
+                    <div className="profileNameCnt" onClick={() => navigate(`/app/user/${cardData.author?.username}`)} style={{ ...styles.profileNameCnt, cursor: 'pointer' }}>
                         <div style={styles.profileImageCnt}>
                             <img />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '.2rem' }}>
-                            <h1 style={{ fontSize: '25px', lineHeight: '25px' }}>{cardData.username}</h1>
-                            <span style={{ color: 'GrayText' }}>{cardData.usertag}</span>
+                            <h1 style={{ fontSize: '25px', lineHeight: '25px' }}>{cardData.author?.username}</h1>
+                            <span style={{ color: 'GrayText' }}>{cardData.author?.usertag}</span>
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '1rem' }}>
                         <GetIntouchButton panelState={showGetIntouchPanel} isResponsive={isMobile ? true : false} showPanel={setGetIntouchPane} />
-                        {showGetIntouchPanel && <GetInTouchPanel />}
+                        {showGetIntouchPanel && cardData.author && <GetInTouchPanel username={cardData.author.username} />}
                         <button style={{ alignSelf: 'flex-end', cursor: 'pointer', background: 'none', border: 'none', padding: '.4rem', borderRadius: '1rem', color: 'white' }} onClick={handleCloseMobile}>
                             <img src="https://img.icons8.com/?size=100&id=8112&format=png&color=7a7a7a" width={'20'} height={'20'} />
                         </button>
@@ -85,7 +108,7 @@ export default function ViewCardCnt({ setPanelOpen, postId, viewCardCoordinate, 
                                 </button>
                             </div>
                             <figcaption>
-                                <p style={{ color: 'GrayText' }}>image of {cardData.usertag}</p>
+                                <p style={{ color: 'GrayText' }}>image of {cardData.author?.usertag}</p>
                             </figcaption>
                         </div>
                     </figure>
@@ -108,28 +131,28 @@ export default function ViewCardCnt({ setPanelOpen, postId, viewCardCoordinate, 
 
                                     <li style={styles.ulList}>
                                         <span>5</span>
-                                        <ProgressBar value={handleRatings(8)} />
-                                        <span>8</span>
+                                        <ProgressBar value={handleRatings(ratingsCount[4])} />
+                                        <span>{ratingsCount[4]}</span>
                                     </li>
                                     <li style={styles.ulList}>
                                         <span>4</span>
-                                        <ProgressBar value={handleRatings(10)} />
-                                        <span>10</span>
+                                        <ProgressBar value={handleRatings(ratingsCount[3])} />
+                                        <span>{ratingsCount[3]}</span>
                                     </li>
                                     <li style={styles.ulList}>
                                         <span>3</span>
-                                        <ProgressBar value={handleRatings(3)} />
-                                        <span>3</span>
+                                        <ProgressBar value={handleRatings(ratingsCount[2])} />
+                                        <span>{ratingsCount[2]}</span>
                                     </li>
                                     <li style={styles.ulList}>
                                         <span>2</span>
-                                        <ProgressBar value={handleRatings(1)} />
-                                        <span>1</span>
+                                        <ProgressBar value={handleRatings(ratingsCount[1])} />
+                                        <span>{ratingsCount[1]}</span>
                                     </li>
                                     <li style={styles.ulList}>
                                         <span>1</span>
-                                        <ProgressBar value={handleRatings(6)} />
-                                        <span>6</span>
+                                        <ProgressBar value={handleRatings(ratingsCount[0])} />
+                                        <span>{ratingsCount[0]}</span>
                                     </li>
                                 </ul>
                             </div>

@@ -7,7 +7,7 @@ export function userFallBack(validating: React.Dispatch<React.SetStateAction<boo
 
     const navigate = useNavigate();
 
-    const handleRoute = (path: any) => {
+    const handleRoute = (path: string) => {
         return setTimeout(() => {
             validating(false)
             navigate(path, { replace: true });
@@ -28,8 +28,7 @@ export function userFallBack(validating: React.Dispatch<React.SetStateAction<boo
                     return routes.splash
                 }
             }
-
-            handleRoute(handleValidation())
+            handleRoute(handleValidation()!)
         };
 
         a();

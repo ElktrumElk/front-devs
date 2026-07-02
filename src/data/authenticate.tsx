@@ -1,36 +1,20 @@
-const isLogin = new Promise<boolean | string | null>((resolve) => {
-
-    const data = localStorage.getItem('isLogin');
-
-    if (data === null) {
-        resolve(null);
-    }
-    else if (data) {
-        resolve(true)
-    }
-    else {
-        resolve(false);
-    }
-});
-
-const isVerified = new Promise<boolean | string | null>((resolve) => {
-    const info = localStorage.getItem('isEmailVerify');
-
-    if (info === null) {
-        resolve(null)
-    }
-    else if (info) {
-        resolve(true);
-    }
-    else {
-        resolve(false);
-    }
-});
+import api from '../api/client';
 
 export async function userAuthentication() {
-    const userLoggedIn = isLogin;
-    const userVerified = isVerified;
-    const [loginResponse, emailResponse] = await Promise.allSettled([userLoggedIn, userVerified]);
-    return { loginResponse, emailResponse };
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return { loginResponse: { status: 'fulfilled', value: null }, emailResponse: { status: 'fulfilled', value: null } };
+  }
 
+  try {
+    const { data } = await api.get('/auth/me');
+    return {
+      loginResponse: { status: 'fulfilled', value: true },
+      emailResponse: { status: 'fulfilled', value: data.isEmailVerified || null },
+    };
+  } catch {
+    localStorage.removeItem('token');
+    localStorage.removeItem('data');
+    return { loginResponse: { status: 'fulfilled', value: null }, emailResponse: { status: 'fulfilled', value: null } };
+  }
 }
