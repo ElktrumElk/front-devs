@@ -23,7 +23,7 @@ export default function Profile() {
     return (
         <>
             <div style={userContainer} onClick={() => navigate('/app/user/profile')}>
-                <img style={userStyle} src="https://img.icons8.com/?size=100&id=22396&format=png&color=000000" alt="user" />
+                <img style={userStyle} src="https://img.icons8.com/?size=100&id=22396&format=png&color=000000" />
             </div>
         </>
     )

@@ -66,6 +66,7 @@ export default function Signup() {
             try {
                 await signup({ fullname, username, email, password });
                 localStorage.setItem('verificationEmail', email);
+                localStorage.setItem('_tempPassword', password);
                 navigate('/verifyemail', { replace: true });
             } catch (err: any) {
                 setError(err.response?.data?.message || 'Signup failed. Please try again.');

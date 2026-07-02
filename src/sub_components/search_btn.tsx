@@ -23,7 +23,7 @@ export default function SearchButton({ color = '7a7a7a', active }: searchbutton)
     return (
         <>
             <button style={isMobile ? footerButton : sideBarButton} onClick={handleRoute}>
-                <img style={footerButtonIc} src={`https://img.icons8.com/?size=100&id=XU3XKgdpT0qG&format=png&color=${color}`} alt="search" />
+                <img style={footerButtonIc} src={`https://img.icons8.com/?size=100&id=XU3XKgdpT0qG&format=png&color=${color}`}  />
                 <span style={{ color: "#" + color }}>Search</span>
             </button>
         </>

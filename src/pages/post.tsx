@@ -1,6 +1,6 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { categoriesData } from "../sub_components/categories";
+import { categoriesData } from "../data/componentArray";
 import { createPost } from "../api/posts";
 import { uploadImage } from "../api/upload";
 
@@ -19,7 +19,7 @@ export default function AddPost() {
         setRemainingChars(MAX_LENGTH - inputLength);
     };
 
-    const categories = categoriesData.filter(x => x !== 'All');
+    const categories = categoriesData.filter((x: string) => x !== 'All');
     const [cat] = useState(categories);
 
     const imageSelector = useRef<HTMLInputElement>(null);
@@ -180,7 +180,7 @@ export default function AddPost() {
                                 </button>
 
                                 {
-                                    cat.map((cat, idx) => (
+                                    cat.map((cat: string, idx: number) => (
                                         <li onClick={() => handleTag(cat)} key={idx} style={{ backgroundColor: tag.includes(cat) ? '#1499ec40' : 'white', flex: '0 0 auto', padding: '.2rem 1rem', borderRadius: '1rem' }}>{cat}</li>
                                     ))
                                 }
@@ -213,7 +213,7 @@ export default function AddPost() {
                         <label htmlFor="cat" style={{ fontSize: '.9rem' }}>Add Category</label>
                         <select ref={categoryRef} id="cat" required style={{ width: '100%', padding: '1rem', borderRadius: '.5rem', outline: 'none', border: 'none', background: 'white' }}>
                             {
-                                categories.map((cat, idx) => (
+                                categories.map((cat: string, idx: number) => (
                                     <option key={idx} >{cat}</option>
                                 ))
                             }

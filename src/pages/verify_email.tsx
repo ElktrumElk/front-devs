@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { verifyEmail, login } from "../api/auth"
+import { verifyEmail, login, resendVerification } from "../api/auth"
 
 const logHeader: React.CSSProperties = {
     width: '100%',
@@ -49,7 +49,9 @@ export default function VerifyEmail() {
     const codeInput = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
+    const [resending, setResending] = useState(false);
 
     const handleCodeVerification = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -63,14 +65,16 @@ export default function VerifyEmail() {
             try {
                 await verifyEmail({ email, code });
                 const password = localStorage.getItem('_tempPassword');
-                const { data } = await login({ email, password: password || '' });
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('data', JSON.stringify(data.user));
+                if (password) {
+                    const { data } = await login({ email, password });
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('data', JSON.stringify(data.user));
+                }
                 localStorage.removeItem('_tempPassword');
                 localStorage.removeItem('verificationEmail');
                 navigate('/app/home');
             } catch (err: any) {
-                setError(err.response?.data?.message || 'Invalid verification code');
+                setError(err.response?.data?.message || 'Verification failed. Please try again.');
             } finally {
                 setLoading(false);
             }
@@ -78,6 +82,25 @@ export default function VerifyEmail() {
             setError('No email found. Please sign up again.');
         }
     }
+
+    const handleResend = async () => {
+        const email = localStorage.getItem('email') || localStorage.getItem('verificationEmail');
+        if (!email) {
+            setError('No email found. Please sign up again.');
+            return;
+        }
+        setResending(true);
+        setError('');
+        setSuccess('');
+        try {
+            await resendVerification(email);
+            setSuccess('A new code has been sent to your email.');
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to resend code');
+        } finally {
+            setResending(false);
+        }
+    };
 
     const maxMizeCharacter = (e: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -109,9 +132,23 @@ export default function VerifyEmail() {
                     </div>
 
                     {error && <span style={{ color: 'red', fontSize: '.9rem' }}>{error}</span>}
+                    {success && <span style={{ color: 'green', fontSize: '.9rem' }}>{success}</span>}
 
                     <button style={submitButtont} type="submit" disabled={loading}>
                         {loading ? 'Verifying...' : 'Verify'}
+                    </button>
+
+                    <button
+                        onClick={handleResend}
+                        disabled={resending}
+                        style={{
+                            ...submitButtont,
+                            background: 'transparent',
+                            color: '#010a1b',
+                            border: '1px solid #010a1b',
+                        }}
+                    >
+                        {resending ? 'Sending...' : 'Resend Code'}
                     </button>
                 </form>
             </div>

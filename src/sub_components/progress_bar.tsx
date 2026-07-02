@@ -15,7 +15,7 @@ export function ProgressBar ({value}: progressbar) {
 
 const progressContainer: React.CSSProperties = {
     width: '100%',
-    height: '1rem',
+    height: '.4rem',
     borderRadius: '1rem',
     display: 'flex',
     alignItems: 'center',
